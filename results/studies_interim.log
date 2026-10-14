@@ -1,0 +1,132 @@
+[Warning: Unable to locate a personal folder for $documents/MATLAB.] 
+Running testRep
+
+================================================================================
+Error occurred in testRep/testShapeDatasetAreaAndValidity and it did not run to completion.
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:undefinedVarOrClass'
+    --------------
+    Error Details:
+    --------------
+    Unable to resolve the name 'chute.rep.shapeDataset'.
+    
+    Error in testRep>testShapeDatasetAreaAndValidity (line 6)
+    [R, info] = chute.rep.shapeDataset(200, 1);
+================================================================================
+.
+================================================================================
+Error occurred in testRep/testPcaMonotone and it did not run to completion.
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:undefinedVarOrClass'
+    --------------
+    Error Details:
+    --------------
+    Unable to resolve the name 'chute.rep.shapeDataset'.
+    
+    Error in testRep>testPcaMonotone (line 14)
+    R = chute.rep.shapeDataset(300, 2);
+================================================================================
+.
+================================================================================
+Error occurred in testRep/testSobolKnownFunction and it did not run to completion.
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:undefinedVarOrClass'
+    --------------
+    Error Details:
+    --------------
+    Unable to resolve the name 'chute.analysis.sobolIndices'.
+    
+    Error in testRep>testSobolKnownFunction (line 21)
+    S = chute.analysis.sobolIndices(f, [0 0 0], [1 1 1], 20000);
+================================================================================
+.
+================================================================================
+Error occurred in testRep/testSobolLargeOffset and it did not run to completion.
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:undefinedVarOrClass'
+    --------------
+    Error Details:
+    --------------
+    Unable to resolve the name 'chute.analysis.sobolIndices'.
+    
+    Error in testRep>testSobolLargeOffset (line 29)
+    S = chute.analysis.sobolIndices(f, [0 0 0], [1 1 1], 20000);
+================================================================================
+.
+================================================================================
+Error occurred in testRep/testLeaveGeometryOut and it did not run to completion.
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:undefinedVarOrClass'
+    --------------
+    Error Details:
+    --------------
+    Unable to resolve the name 'chute.surrogate.leaveGeometryOutCV'.
+    
+    Error in testRep>testLeaveGeometryOut (line 36)
+    T = chute.surrogate.leaveGeometryOutCV(X, y, g, {'linear','quadratic'}, 5);
+================================================================================
+.
+================================================================================
+Error occurred in testRep/testHypervolumeKnown and it did not run to completion.
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:undefinedVarOrClass'
+    --------------
+    Error Details:
+    --------------
+    Unable to resolve the name 'chute.analysis.hypervolume2d'.
+    
+    Error in testRep>testHypervolumeKnown (line 41)
+    [hv, ~, front] = chute.analysis.hypervolume2d([1 3; 2 2; 3 1; 2.5 2.5], [4
+    4]);
+================================================================================
+.
+Done testRep
+__________
+
+Failure Summary:
+
+     Name                                     Failed  Incomplete  Reason(s)
+    ========================================================================
+     testRep/testShapeDatasetAreaAndValidity    X         X       Errored.
+    ------------------------------------------------------------------------
+     testRep/testPcaMonotone                    X         X       Errored.
+    ------------------------------------------------------------------------
+     testRep/testSobolKnownFunction             X         X       Errored.
+    ------------------------------------------------------------------------
+     testRep/testSobolLargeOffset               X         X       Errored.
+    ------------------------------------------------------------------------
+     testRep/testLeaveGeometryOut               X         X       Errored.
+    ------------------------------------------------------------------------
+     testRep/testHypervolumeKnown               X         X       Errored.
+                       Name                        Passed    Failed    Incomplete    Duration      Details   
+    ___________________________________________    ______    ______    __________    ________    ____________
+
+    {'testRep/testShapeDatasetAreaAndValidity'}    false     true        true          0.1843    {1×1 struct}
+    {'testRep/testPcaMonotone'                }    false     true        true        0.058195    {1×1 struct}
+    {'testRep/testSobolKnownFunction'         }    false     true        true        0.033282    {1×1 struct}
+    {'testRep/testSobolLargeOffset'           }    false     true        true        0.026432    {1×1 struct}
+    {'testRep/testLeaveGeometryOut'           }    false     true        true          2.0843    {1×1 struct}
+    {'testRep/testHypervolumeKnown'           }    false     true        true        0.032324    {1×1 struct}
+
+1017 drops with complete sensor-derived features
+       model         rmse        mae       rank_corr
+    ___________    ________    ________    _________
+
+    "linear"       0.066545    0.042356     0.44057 
+    "quadratic"    0.068284    0.040896     0.47642 
+    "gp"           0.070043    0.041899     0.41334 
+    "ensemble"      0.06728    0.040279     0.48405 
+
+k-means: k=4 silhouette 0.67 (meaningful=1); PCA needs 4 comps for 90%
