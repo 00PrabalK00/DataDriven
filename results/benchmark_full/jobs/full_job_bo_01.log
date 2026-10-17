@@ -1,0 +1,102 @@
+[Warning: Unable to locate a personal folder for $documents/MATLAB.] 
+[2026-10-16 19:06:14] bo run 1/10
+{Error using remote>map (line 133)
+Python Error: RuntimeError: remote task failed:
+concurrent.futures.process._RemoteTraceback:
+"""
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/concurrent/futures/process.py", line 246, in
+  _process_worker
+    r = call_item.fn(*call_item.args, **call_item.kwargs)
+  File "/root/DataDriven/python/chutesim/evaluate.py", line 102, in _task
+    r = write_drop(design_from(d), seed, cfg, run_root, trial)
+  File "/root/DataDriven/python/chutesim/run_drop.py", line 82, in write_drop
+    cam = RealSenseSim(phys["model"], cfg)
+  File "/root/DataDriven/python/chutesim/camera.py", line 64, in __init__
+    self.rgb_r = mujoco.Renderer(model, cc["color"]["height"],
+    cc["color"]["width"])
+  File
+  "/root/DataDriven/python/.venv/lib/python3.10/site-packages/mujoco/rendering/classic/renderer.py",
+  line 92, in __init__
+    self._mjr_context = mujoco.MjrContext(model, font_scale.value)
+mujoco.FatalError: Offscreen framebuffer is not complete, error 0x8cdd
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/root/DataDriven/python/chutesim/remote.py", line 69, in _serve_conn
+    out.append(f.result())
+  File "/usr/lib/python3.10/concurrent/futures/_base.py", line 451, in result
+    return self.__get_result()
+  File "/usr/lib/python3.10/concurrent/futures/_base.py", line 403, in
+  __get_result
+    raise self._exception
+mujoco.FatalError: Offscreen framebuffer is not complete, error 0x8cdd
+
+
+Error in evaluate (line 195)
+
+Error in bridge>evaluate_json (line 49)
+
+Error in chute.bridge.evaluate (line 19)
+out = chute.bridge.call('evaluate_json', jsonencode(req));
+
+Error in chute.bench.simulatorEnv>callSim (line 14)
+[res, ~] = chute.bridge.evaluate(X, seeds, tag=opts.tag, log_path=opts.log_path, n_workers=opts.n_workers);
+
+Error in chute.bench.simulatorEnv>@(X)callSim(X,seeds,opts) (line 10)
+env = @(X) callSim(X, seeds, opts);
+
+Error in chute.bench.BudgetedObjective/evalVec (line 39)
+            r = obj.env(X(1:m,:));
+
+Error in chute.bench.BudgetedObjective/eval (line 30)
+            f = obj.evalVec(x(:)');
+
+Error in chute.bench.runMethod>@(t)obj.eval([t.q,t.l,t.r]) (line 41)
+            bayesopt(@(t) obj.eval([t.q t.l t.r]), vars, 'MaxObjectiveEvaluations', budget, ...
+
+Error in BayesianOptimization/callObjNormally (line 13)
+            Objective = this.ObjectiveFcn(conditionalizeX(this, X));
+
+Error in BayesianOptimization/callObjFcn (line 11)
+        = callObjNormally(this, X);
+
+Error in BayesianOptimization/runSerial (line 24)
+        ObjectiveFcnObjectiveEvaluationTime, ObjectiveNargout] = callObjFcn(this, this.XNext);
+
+Error in BayesianOptimization/run (line 9)
+    this = runSerial(this);
+
+Error in BayesianOptimization (line 64)
+                this = run(this);
+
+Error in bayesopt (line 12)
+Results = BayesianOptimization(Options);
+
+Error in chute.bench.runMethod (line 41)
+            bayesopt(@(t) obj.eval([t.q t.l t.r]), vars, 'MaxObjectiveEvaluations', budget, ...
+
+Error in chute.bench.runBenchmark (line 53)
+        r = chute.bench.runMethod(opts.methods{m}, env, opts.budget, 1000*gi + k);
+
+Error in m9_job (line 6)
+B = chute.bench.runBenchmark(methods={METHOD}, nRuns=10, runIndices=RUNK, budget=200, nScenarios=5, ...
+
+Error in run (line 100)
+evalin('caller', strcat(scriptStem, ';'));
+} 
+/usr/local/MATLAB/R2026a/bin/matlab failed with exit status 1.
+[Warning: Unable to locate a personal folder for $documents/MATLAB.] 
+[2026-10-16 19:19:59] bo run 1/10
+remote unavailable (); retrying in 5s
+remote unavailable (); retrying in 5s
+remote unavailable (); retrying in 5s
+remote unavailable (); retrying in 5s
+    method    runs    best_median    best_iqr    best_at25    best_at50    best_at100    best_at200    evals_to_target_median    frac_reached_target    requests_median    unique_designs_median    simulated_drops_median    valid_geometry_rate    sensing_failure_rate    wall_s_median    frac_ended_early    fresh_score_median    hypervolume_median    spacing_median
+    ______    ____    ___________    ________    _________    _________    __________    __________    ______________________    ___________________    _______________    _____________________    ______________________    ___________________    ____________________    _____________    ________________    __________________    __________________    ______________
+
+     "bo"      1        6.9046          0         6.9088       6.9086        6.9075        6.9046               164                       1                   200                   200                      950                       1                    0.105               6049.9               0                  6.843                  NaN                 NaN      
+
+JOB DONE bo 1

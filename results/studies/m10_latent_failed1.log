@@ -1,0 +1,47 @@
+[Warning: Unable to locate a personal folder for $documents/MATLAB.] 
+reusing saved representation models
+{Unable to perform assignment because the size of the left side is 1-by-3 and
+the size of the right side is 1-by-6.
+
+Error in chute.bench.BudgetedObjective/evalVec (line 44)
+                obj.X(end+1,:) = X(i,:);
+                ^^^^^^^^^^^^^^
+Error in chute.bench.BudgetedObjective/eval (line 30)
+            f = obj.evalVec(x(:)');
+                ^^^^^^^^^^^^^^^^^^
+Error in chute.rep.latentSearch>@(t)obj.eval(table2array(t)) (line 59)
+            bayesopt(@(t) obj.eval(table2array(t)), vars, 'MaxObjectiveEvaluations', budget, 'IsObjectiveDeterministic', true, ...
+                          ^^^^^^^^^^^^^^^^^^^^^^^^
+Error in BayesianOptimization/callObjNormally (line 13)
+            Objective = this.ObjectiveFcn(conditionalizeX(this, X));
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in BayesianOptimization/callObjFcn (line 24)
+            = callObjNormally(this, X);
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+Error in BayesianOptimization/runSerial (line 24)
+        ObjectiveFcnObjectiveEvaluationTime, ObjectiveNargout] = callObjFcn(this, this.XNext);
+                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in BayesianOptimization/run (line 9)
+    this = runSerial(this);
+           ^^^^^^^^^^^^^^^
+Error in BayesianOptimization (line 64)
+                this = run(this);
+                       ^^^^^^^^^
+Error in bayesopt (line 12)
+Results = BayesianOptimization(Options);
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in chute.rep.latentSearch>runBoxed (line 59)
+            bayesopt(@(t) obj.eval(table2array(t)), vars, 'MaxObjectiveEvaluations', budget, 'IsObjectiveDeterministic', true, ...
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in chute.rep.latentSearch (line 43)
+        res = runBoxed(opts.method, env, opts.budget, 500 + r, reps{i,3}, reps{i,4});
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in m10_latent (line 16)
+LS = chute.rep.latentSearch(R, P, A, V, k=4, budget=50, nRuns=NRUNS, nScenarios=3, method='bo');
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in run (line 100)
+evalin('caller', strcat(scriptStem, ';'));
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+} 
+/usr/lib/python3.10/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 6 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
