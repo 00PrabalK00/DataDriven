@@ -20,7 +20,7 @@ def _surrogate_factory(path, noise_sd, fail_prob):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--env", choices=["analytic", "surrogate", "simulator"], required=True)
+    ap.add_argument("--env", choices=["analytic", "surrogate", "simulator", "free"], required=True)
     ap.add_argument("--analytic-name", default="quadratic", help="quadratic | multimodal | edge")
     ap.add_argument("--surrogate-model", help="pickled callable / predict() model / {'score','secondary'} dict")
     ap.add_argument("--noise-sd", type=float, default=0.0, help="surrogate env: score noise")
@@ -42,6 +42,12 @@ def main(argv=None):
     if a.env == "analytic":
         factory = functools.partial(analytic_env, a.analytic_name)
         level, name = "L1", f"analytic:{a.analytic_name}"
+    elif a.env == "free":
+        from .free import free_env
+        if not a.surrogate_model:
+            ap.error("--surrogate-model is required for --env free")
+        factory = functools.partial(free_env, a.surrogate_model, a.noise_sd, a.fail_prob)
+        level, name = "L2", "free-form CFD surrogate environment (D6 field weights)"
     elif a.env == "surrogate":
         if not a.surrogate_model:
             ap.error("--surrogate-model is required for --env surrogate")

@@ -33,7 +33,7 @@ def default_bounds(cfg: dict | None = None):
 def run_method(method: str, env, budget: int = 200, seed: int = 1, bounds=None, settings: dict | None = None) -> dict:
     rng = np.random.default_rng(seed)
     lb, ub = default_bounds() if bounds is None else (np.asarray(bounds[0], float), np.asarray(bounds[1], float))
-    obj = BudgetedObjective(env, budget)
+    obj = BudgetedObjective(env, budget, zero_slit_r=getattr(env, "zero_slit_r", 0.45))
     s = dict(settings or {})
     converged, msg = False, ""
     fn = _DISPATCH.get(method.lower())
@@ -337,6 +337,8 @@ def _tabu(obj, lb, ub, rng, s, seed):
     designs are memoized (no repeated requests for the same grid point)."""
     d = lb.size
     steps = np.asarray(s.get("steps", [0.5, 0.025, 0.05]), float)
+    if steps.size != d:   # other encodings (e.g. free-form field weights): 16 levels per variable
+        steps = (ub - lb) / 16.0
     tenure = int(s.get("tenure", 7))
     restart_after = int(s.get("restartAfter", 10))
     levels = (np.floor((ub - lb) / steps + 1e-10) + 1).astype(int)   # numel(lb:step:ub)

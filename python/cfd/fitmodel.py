@@ -25,12 +25,12 @@ def features_of(designs, cfg) -> np.ndarray:
     return np.array(rows)
 
 
-def make_gp():
+def make_gp(n_inputs: int | None = None):
     from sklearn.gaussian_process import GaussianProcessRegressor
     from sklearn.gaussian_process.kernels import ConstantKernel, Matern, WhiteKernel
     from sklearn.pipeline import make_pipeline
     from sklearn.preprocessing import StandardScaler
-    k = ConstantKernel(1.0) * Matern(length_scale=np.ones(len(FEATURES)), nu=2.5) + WhiteKernel(1e-3)
+    k = ConstantKernel(1.0) * Matern(length_scale=np.ones(n_inputs or len(FEATURES)), nu=2.5) + WhiteKernel(1e-3)
     return make_pipeline(StandardScaler(), GaussianProcessRegressor(k, normalize_y=True, n_restarts_optimizer=5, random_state=0))
 
 

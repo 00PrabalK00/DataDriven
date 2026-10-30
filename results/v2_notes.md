@@ -33,3 +33,9 @@ parts (batch 6 = 60 drops), merges the part CSVs into screen.csv / verify_winner
 destroyed (vast shows 0 instances). Credit left $3.60 (started $11.63). Tiers re-run with the screen cross-check:
 designs unchanged; full-sim screen confirms best < middle < worst with no overlap; surrogate vs full-sim Spearman
 0.995 (374 screen designs), 0.985 (76 verified winners).
+
+## 2026-10-30 evening: free-form CFD on vast 58441610 (EPYC 7B12, 128 threads, $0.53/h)
+Round times ~60 min with 28 cases x 4 ranks. free11 (both angles): potentialFoam FPE on 28 highly skewed faces ->
+cfd.case.run_stl retries without potentialFoam; failures rerun by scripts/v3/run_free_cfd_retry.sh. free03 a=0
+failed because the CFD video ran the same design + angle at the same time (same case folder): my error; video
+restarted at alpha 0.001 so the case name differs. The simulator env and v2 results are not affected.

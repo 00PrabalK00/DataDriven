@@ -1,0 +1,186 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2406                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _1653fa08-20260127 OPENFOAM=2406 patch=260127 version=2406
+Arch   : "LSB;label=32;scalar=64"
+Exec   : potentialFoam -parallel -writephi
+Date   : Oct 30 2026
+Time   : 19:21:21
+Host   : 7fb55b8bf4c6
+PID    : 16292
+I/O    : uncollated
+Case   : /root/DataDriven/results/cfd/cases/canopy_b87a0255de_a0_L5
+nProcs : 4
+Hosts  :
+(
+    (7fb55b8bf4c6 4)
+)
+Pstream initialized with:
+    floatTransfer      : false
+    maxCommsSize       : 0
+    nProcsSimpleSum    : 0
+    nonBlockingExchange: 0 (tuning: 0)
+    exchange algorithm : 0
+    commsType          : nonBlocking
+    polling iterations : 0
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = 0
+
+
+potentialFlow: Operating solver in PISO mode
+
+Reading velocity field U
+
+Constructing pressure field p
+
+Constructing velocity potential field Phi
+
+No MRF models present
+
+
+Calculating potential flow
+[3] [stack trace]
+[3] =============
+[3] #[2] [stack trace]
+[2] =============
+1  Foam::sigFpe::sigHandler(int)[2] #1  Foam::sigFpe::sigHandler(int)sh: 1: addr2line: not found
+ addr2line failed
+[3] #2  ?sh: 1: addr2line: not found
+ addr2line failed
+[3] #3  Foam::DICPreconditioner::calcReciprocalD(Foam::Field<double>&, Foam::lduMatrix const&)sh: 1: addr2line: not found
+ addr2line failed
+[3] #4  Foam::DICPreconditioner::DICPreconditioner(Foam::lduMatrix::solver const&, Foam::dictionary const&)sh: 1: addr2line: not found
+ addr2line failed
+[3] #5  Foam::lduMatrix::preconditioner::addsymMatrixConstructorToTable<Foam::DICPreconditioner>::New(Foam::lduMatrix::solver const&, Foam::dictionary const&)sh: 1: addr2line: not found
+ addr2line failed
+[3] #6  Foam::lduMatrix::preconditioner::New(Foam::lduMatrix::solver const&, Foam::dictionary const&)sh: 1: addr2line: not found
+ addr2line failed
+[3] #7  Foam::PCG::scalarSolve(Foam::Field<double>&, Foam::Field<double> const&, unsigned char) constsh: 1: addr2line: not found
+ addr2line failed
+[3] #8  Foam::GAMGSolver::solveCoarsestLevel(Foam::Field<double>&, Foam::Field<double> const&) constsh: 1: addr2line: not found
+ addr2line failed
+[2] #2  ?sh: 1: addr2line: not found
+ addr2line failed
+[3] #9  Foam::GAMGSolver::Vcycle(Foam::PtrList<Foam::lduMatrix::smoother> const&, Foam::Field<double>&, Foam::Field<double> const&, Foam::Field<double>&, Foam::Field<double>&, Foam::Field<double>&, Foam::Field<double>&, Foam::Field<double>&, Foam::PtrList<Foam::Field<double> >&, Foam::PtrList<Foam::Field<double> >&, unsigned char) constsh: 1: addr2line: not found
+ addr2line failed
+[2] #3  Foam::DICPreconditioner::calcReciprocalD(Foam::Field<double>&, Foam::lduMatrix const&)sh: 1: addr2line: not found
+ addr2line failed
+[2] #4  Foam::DICPreconditioner::DICPreconditioner(Foam::lduMatrix::solver const&, Foam::dictionary const&)sh: 1: addr2line: not found
+ addr2line failed
+[3] #10  Foam::GAMGSolver::solve(Foam::Field<double>&, Foam::Field<double> const&, unsigned char) constsh: 1: addr2line: not found
+sh: 1: addr2line: not found
+ addr2line failed
+[3] #11  Foam::fvMatrix<double>::solveSegregated(Foam::dictionary const&) addr2line failed
+[2] #5  Foam::lduMatrix::preconditioner::addsymMatrixConstructorToTable<Foam::DICPreconditioner>::New(Foam::lduMatrix::solver const&, Foam::dictionary const&)sh: 1: addr2line: not found
+ addr2line failed
+[3] #12  ?sh: 1: addr2line: not found
+ addr2line failed
+[2] #6  Foam::lduMatrix::preconditioner::New(Foam::lduMatrix::solver const&, Foam::dictionary const&)sh: 1: addr2line: not found
+sh: 1: addr2line: not found
+ addr2line failed
+[2] #7  Foam::PCG::scalarSolve(Foam::Field<double>&, Foam::Field<double> const&, unsigned char) const addr2line failed
+[3] #13  Foam::fvMesh::solve(Foam::fvMatrix<double>&, Foam::dictionary const&) constsh: 1: addr2line: not found
+ addr2line failed
+[2] #8  Foam::GAMGSolver::solveCoarsestLevel(Foam::Field<double>&, Foam::Field<double> const&) constsh: 1: addr2line: not found
+ addr2line failed
+sh: 1: [2] #9  Foam::GAMGSolver::Vcycle(Foam::PtrList<Foam::lduMatrix::smoother> const&, Foam::Field<double>&, Foam::Field<double> const&, Foam::Field<double>&, Foam::Field<double>&, Foam::Field<double>&, Foam::Field<double>&, Foam::Field<double>&, Foam::PtrList<Foam::Field<double> >&, Foam::PtrList<Foam::Field<double> >&, unsigned char) constaddr2line: not found
+ addr2line failed
+[3] #14  sh: 1: addr2line: not found
+ addr2line failed
+[2] #10  Foam::GAMGSolver::solve(Foam::Field<double>&, Foam::Field<double> const&, unsigned char) const?sh: 1: addr2line: not found
+ addr2line failed
+[3] #15  ?sh: 1: addr2line: not found
+ addr2line failed
+[3] #16  ?sh: 1: addr2line: not found
+ addr2line failed
+[3] #17  __libc_start_mainsh: 1: addr2line: not found
+sh: 1: addr2line: not found
+ addr2line failed
+[3] #18   addr2line failed
+[2] #11  Foam::fvMatrix<double>::solveSegregated(Foam::dictionary const&)sh: 1: addr2line: not found
+ addr2line failed
+[2] #12  ?sh: 1: addr2line: not found
+ addr2line failed
+[2] #13  Foam::fvMesh::solve(Foam::fvMatrix<double>&, Foam::dictionary const&) const?sh: 1: addr2line: not found
+ addr2line failed
+[2] #14  sh: 1: addr2line: not found
+ addr2line failed
+[3] =============
+[7fb55b8bf4c6:16295] *** Process received signal ***
+[7fb55b8bf4c6:16295] Signal: Floating point exception (8)
+[7fb55b8bf4c6:16295] Signal code:  (-6)
+[7fb55b8bf4c6:16295] Failing at address: 0x3fa7
+[7fb55b8bf4c6:16295] [ 0] ?/usr/lib/x86_64-linux-gnu/libc.so.6(+0x42520)[0x79e57d0f3520]
+[7fb55b8bf4c6:16295] [ 1] /usr/lib/x86_64-linux-gnu/libc.so.6(pthread_kill+0x12c)[0x79e57d1479fc]
+[7fb55b8bf4c6:16295] [ 2] /usr/lib/x86_64-linux-gnu/libc.so.6(raise+0x16)[0x79e57d0f3476]
+[7fb55b8bf4c6:16295] [ 3] /usr/lib/x86_64-linux-gnu/libc.so.6(+0x42520)[0x79e57d0f3520]
+[7fb55b8bf4c6:16295] [ 4] /usr/lib/openfoam/openfoam2406/platforms/linux64GccDPInt32Opt/lib/libOpenFOAM.so(_ZN4Foam17DICPreconditioner15calcReciprocalDERNS_5FieldIdEERKNS_9lduMatrixE+0x108)[0x79e57da78438]
+[7fb55b8bf4c6:16295] [ 5] /usr/lib/openfoam/openfoam2406/platforms/linux64GccDPInt32Opt/lib/libOpenFOAM.so(_ZN4Foam17DICPreconditionerC1ERKNS_9lduMatrix6solverERKNS_10dictionaryE+0x6c)[0x79e57da7930c]
+[7fb55b8bf4c6:16295] [ 6] /usr/lib/openfoam/openfoam2406/platforms/linux64GccDPInt32Opt/lib/libOpenFOAM.so(_ZN4Foam9lduMatrix14preconditioner30addsymMatrixConstructorToTableINS_17DICPreconditionerEE3NewERKNS0_6solverERKNS_10dictionaryE+0x33)[0x79e57da79353]
+[7fb55b8bf4c6:16295] [ 7] /usr/lib/openfoam/openfoam2406/platforms/linux64GccDPInt32Opt/lib/libOpenFOAM.so(_ZN4Foam9lduMatrix14preconditioner3NewERKNS0_6solverERKNS_10dictionaryE+0x1bb)[0x79e57da72eab]
+[7fb55b8bf4c6:16295] [ 8] /usr/lib/openfoam/openfoam2406/platforms/linux64GccDPInt32Opt/lib/libOpenFOAM.so(_ZNK4Foam3PCG11scalarSolveERNS_5FieldIdEERKS2_h+0x982)[0x79e57da73b22]
+[7fb55b8bf4c6:16295] [ 9] /usr/lib/openfoam/openfoam2406/platforms/linux64GccDPInt32Opt/lib/libOpenFOAM.so(_ZNK4Foam10GAMGSolver18solveCoarsestLevelERNS_5FieldIdEERKS2_+0x212)[0x79e57da8d6a2]
+[7fb55b8bf4c6:16295] [10] /usr/lib/openfoam/openfoam2406/platforms/linux64GccDPInt32Opt/lib/libOpenFOAM.so(_ZNK4Foam10GAMGSolver6VcycleERKNS_7PtrListINS_9lduMatrix8smootherEEERNS_5FieldIdEERKS8_S9_S9_S9_S9_S9_RNS1_IS8_EESD_h+0x40d)[0x79e57da8dead]
+[7fb55b8bf4c6:16295] [11] /usr/lib/openfoam/openfoam2406/platforms/linux64GccDPInt32Opt/lib/libOpenFOAM.so(_ZNK4Foam10GAMGSolver5solveERNS_5FieldIdEERKS2_h+0x4ab)[0x79e57da8f27b]
+[7fb55b8bf4c6:16295] [12] /usr/lib/openfoam/openfoam2406/platforms/linux64GccDPInt32Opt/lib/libfiniteVolume.so(_ZN4Foam8fvMatrixIdE15solveSegregatedERKNS_10dictionaryE+0x3e4)[0x79e57f06ec24]
+[7fb55b8bf4c6:16295] [13] /usr/lib/openfoam/openfoam2406/platforms/linux64GccDPInt32Opt/lib/libfiniteVolume.so(+0x4baa68)[0x79e57ec11a68]
+[7fb55b8bf4c6:16295] [14] sh: 1: addr2line: not found
+/usr/lib/openfoam/openfoam2406/platforms/linux64GccDPInt32Opt/lib/libfiniteVolume.so(_ZNK4Foam6fvMesh5solveERNS_8fvMatrixIdEERKNS_10dictionaryE+0x28)[0x79e57ec00a58]
+[7fb55b8bf4c6:16295] [15] potentialFoam(+0x1f4e9)[0x57bd40c084e9]
+[7fb55b8bf4c6:16295] [16] potentialFoam(+0x1b4e1)[0x57bd40c044e1]
+[7fb55b8bf4c6:16295] [17] /usr/lib/x86_64-linux-gnu/libc.so.6(+0x29d90)[0x79e57d0dad90]
+[7fb55b8bf4c6:16295] [18] /usr/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x80)[0x79e57d0dae40]
+[7fb55b8bf4c6:16295] [19] potentialFoam(+0x1dd55)[0x57bd40c06d55]
+[7fb55b8bf4c6:16295] *** End of error message ***
+ addr2line failed
+[2] #15  ?sh: 1: addr2line: not found
+ addr2line failed
+[2] #16  ?sh: 1: addr2line: not found
+ addr2line failed
+[2] #17  __libc_start_mainsh: 1: addr2line: not found
+ addr2line failed
+[2] #18  ?sh: 1: addr2line: not found
+ addr2line failed
+[2] =============
+[7fb55b8bf4c6:16294] *** Process received signal ***
+[7fb55b8bf4c6:16294] Signal: Floating point exception (8)
+[7fb55b8bf4c6:16294] Signal code:  (-6)
+[7fb55b8bf4c6:16294] Failing at address: 0x3fa6
+[7fb55b8bf4c6:16294] [ 0] /usr/lib/x86_64-linux-gnu/libc.so.6(+0x42520)[0x733d34179520]
+[7fb55b8bf4c6:16294] [ 1] /usr/lib/x86_64-linux-gnu/libc.so.6(pthread_kill+0x12c)[0x733d341cd9fc]
+[7fb55b8bf4c6:16294] [ 2] /usr/lib/x86_64-linux-gnu/libc.so.6(raise+0x16)[0x733d34179476]
+[7fb55b8bf4c6:16294] [ 3] /usr/lib/x86_64-linux-gnu/libc.so.6(+0x42520)[0x733d34179520]
+[7fb55b8bf4c6:16294] [ 4] /usr/lib/openfoam/openfoam2406/platforms/linux64GccDPInt32Opt/lib/libOpenFOAM.so(_ZN4Foam17DICPreconditioner15calcReciprocalDERNS_5FieldIdEERKNS_9lduMatrixE+0x108)[0x733d34afe438]
+[7fb55b8bf4c6:16294] [ 5] /usr/lib/openfoam/openfoam2406/platforms/linux64GccDPInt32Opt/lib/libOpenFOAM.so(_ZN4Foam17DICPreconditionerC1ERKNS_9lduMatrix6solverERKNS_10dictionaryE+0x6c)[0x733d34aff30c]
+[7fb55b8bf4c6:16294] [ 6] /usr/lib/openfoam/openfoam2406/platforms/linux64GccDPInt32Opt/lib/libOpenFOAM.so(_ZN4Foam9lduMatrix14preconditioner30addsymMatrixConstructorToTableINS_17DICPreconditionerEE3NewERKNS0_6solverERKNS_10dictionaryE+0x33)[0x733d34aff353]
+[7fb55b8bf4c6:16294] [ 7] /usr/lib/openfoam/openfoam2406/platforms/linux64GccDPInt32Opt/lib/libOpenFOAM.so(_ZN4Foam9lduMatrix14preconditioner3NewERKNS0_6solverERKNS_10dictionaryE+0x1bb)[0x733d34af8eab]
+[7fb55b8bf4c6:16294] [ 8] /usr/lib/openfoam/openfoam2406/platforms/linux64GccDPInt32Opt/lib/libOpenFOAM.so(_ZNK4Foam3PCG11scalarSolveERNS_5FieldIdEERKS2_h+0x982)[0x733d34af9b22]
+[7fb55b8bf4c6:16294] [ 9] /usr/lib/openfoam/openfoam2406/platforms/linux64GccDPInt32Opt/lib/libOpenFOAM.so(_ZNK4Foam10GAMGSolver18solveCoarsestLevelERNS_5FieldIdEERKS2_+0x212)[0x733d34b136a2]
+[7fb55b8bf4c6:16294] [10] /usr/lib/openfoam/openfoam2406/platforms/linux64GccDPInt32Opt/lib/libOpenFOAM.so(_ZNK4Foam10GAMGSolver6VcycleERKNS_7PtrListINS_9lduMatrix8smootherEEERNS_5FieldIdEERKS8_S9_S9_S9_S9_S9_RNS1_IS8_EESD_h+0x40d)[0x733d34b13ead]
+[7fb55b8bf4c6:16294] [11] /usr/lib/openfoam/openfoam2406/platforms/linux64GccDPInt32Opt/lib/libOpenFOAM.so(_ZNK4Foam10GAMGSolver5solveERNS_5FieldIdEERKS2_h+0x4ab)[0x733d34b1527b]
+[7fb55b8bf4c6:16294] [12] /usr/lib/openfoam/openfoam2406/platforms/linux64GccDPInt32Opt/lib/libfiniteVolume.so(_ZN4Foam8fvMatrixIdE15solveSegregatedERKNS_10dictionaryE+0x3e4)[0x733d360f4c24]
+[7fb55b8bf4c6:16294] [13] /usr/lib/openfoam/openfoam2406/platforms/linux64GccDPInt32Opt/lib/libfiniteVolume.so(+0x4baa68)[0x733d35c97a68]
+[7fb55b8bf4c6:16294] [14] /usr/lib/openfoam/openfoam2406/platforms/linux64GccDPInt32Opt/lib/libfiniteVolume.so(_ZNK4Foam6fvMesh5solveERNS_8fvMatrixIdEERKNS_10dictionaryE+0x28)[0x733d35c86a58]
+[7fb55b8bf4c6:16294] [15] potentialFoam(+0x1f4e9)[0x5620f38714e9]
+[7fb55b8bf4c6:16294] [16] potentialFoam(+0x1b4e1)[0x5620f386d4e1]
+[7fb55b8bf4c6:16294] [17] /usr/lib/x86_64-linux-gnu/libc.so.6(+0x29d90)[0x733d34160d90]
+[7fb55b8bf4c6:16294] [18] /usr/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x80)[0x733d34160e40]
+[7fb55b8bf4c6:16294] [19] potentialFoam(+0x1dd55)[0x5620f386fd55]
+[7fb55b8bf4c6:16294] *** End of error message ***
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun noticed that process rank 3 with PID 0 on node 7fb55b8bf4c6 exited on signal 8 (Floating point exception).
+--------------------------------------------------------------------------

@@ -79,7 +79,7 @@ class BudgetedObjective:
     def canonical_key(self, x) -> str:
         # slit length / slit radius are the last two columns in every encoding
         x = np.array(x, float)
-        if x[-2] == 0:
+        if self.zero_slit_r is not None and x[-2] == 0:   # None: encodings without slit columns
             x[-1] = self.zero_slit_r
         return "-".join(float(v).hex() for v in x)
 

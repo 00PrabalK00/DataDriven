@@ -57,7 +57,8 @@ def _run_one(method, k, budget, env_factory, settings, path, env=None):
     own = env is None
     env = env_factory() if own else env
     try:
-        r = run_method(method, env, budget, run_seed(method, k), settings=(settings or {}).get(method))
+        r = run_method(method, env, budget, run_seed(method, k), bounds=getattr(env, "bounds", None),
+                       settings=(settings or {}).get(method))
     finally:
         if own and hasattr(env, "close"):
             env.close()

@@ -2,7 +2,8 @@
 
 Model (quasi-static, one-way coupled, assumption L2):
 - membrane: triangulated flat sheet with the real outline; slits are real cuts (nodes duplicated along
-  each slit, tips shared) so the two sides can separate under load;
+  each slit, tips shared) so the two sides can separate under load; cut-outs (vent / holes, chutesim.cutouts)
+  are removed from the sheet (free inner boundaries);
 - in-plane: tension-only edge springs, k_e = E*t * (adjacent triangle area) / L_e^2 (wrinkling sheet);
 - bending: quadratic isometric bending model (Bergou et al. 2006), B = E t^3 / 12 (times bend_scale);
   it regularises wrinkles at mesh scale;
@@ -35,6 +36,7 @@ class FlatMesh:
     tris: np.ndarray
     attach: np.ndarray
     slit_loops: list = field(default_factory=list)  # per slit: (side_a ids tip->tip, side_b ids tip->tip)
+    hole_loops: list = field(default_factory=list)  # per cut-out: boundary node ids in order
 
 
 def _resample_closed(poly: np.ndarray, h: float, keep: np.ndarray | None = None) -> np.ndarray:
@@ -76,10 +78,16 @@ def _crosses(p0, p1, a, b) -> np.ndarray:
     return (o1 * o2 < -eps) & (o3 * o4 < -eps)
 
 
-def mesh_flat(outline: np.ndarray, slits: np.ndarray, attach_pts: np.ndarray, h: float = 0.004) -> FlatMesh:
-    """Unstructured flat mesh of the cut pattern: Delaunay on boundary + slit + hex-lattice interior points,
-    triangles outside the outline removed, slit cuts made by duplicating slit-interior nodes."""
+def mesh_flat(outline: np.ndarray, slits: np.ndarray, attach_pts: np.ndarray, h: float = 0.004,
+              holes: list | tuple = ()) -> FlatMesh:
+    """Unstructured flat mesh of the cut pattern: Delaunay on boundary + slit + hole + hex-lattice interior
+    points, triangles outside the outline or inside a hole removed, slit cuts made by duplicating
+    slit-interior nodes."""
     bnd = _resample_closed(outline, h, keep=attach_pts)
+    # hole boundaries: at least 24 points per hole so small holes keep their shape
+    hole_pts = [_resample_closed(hp, min(h, float(np.sum(np.linalg.norm(np.roll(hp, -1, 0) - hp, axis=1))) / 24))
+                for hp in holes]
+    hole_paths = [MplPath(hp) for hp in holes]
     # slit points (finer spacing so the slit edges are Delaunay edges)
     hs = 0.5 * h
     slit_pts = []
@@ -102,8 +110,11 @@ def mesh_flat(outline: np.ndarray, slits: np.ndarray, attach_pts: np.ndarray, h:
     keep = db > 0.6 * h
     for a, b in slits:
         keep &= _seg_dist(lat, a, b) > 0.55 * h
+    for hp, hpath in zip(hole_pts, hole_paths):
+        keep &= ~hpath.contains_points(lat)
+        keep &= cKDTree(hp).query(lat)[0] > 0.6 * h
     lat = lat[keep]
-    blocks = [bnd, lat] + slit_pts
+    blocks = [bnd, lat] + slit_pts + hole_pts
     xy = np.vstack(blocks)
     nb = len(bnd)
     off = nb + len(lat)
@@ -111,11 +122,17 @@ def mesh_flat(outline: np.ndarray, slits: np.ndarray, attach_pts: np.ndarray, h:
     for sp_ in slit_pts:
         slit_ids.append(np.arange(off, off + len(sp_)))
         off += len(sp_)
+    hole_ids = []
+    for hp in hole_pts:
+        hole_ids.append(np.arange(off, off + len(hp)))
+        off += len(hp)
 
     tri = Delaunay(xy).simplices
     cen = xy[tri].mean(1)
     tri = tri[path.contains_points(cen, radius=-1e-9) | path.contains_points(cen, radius=1e-9)]
     tri = tri[MplPath(outline).contains_points(xy[tri].mean(1))]
+    for hpath in hole_paths:
+        tri = tri[~hpath.contains_points(xy[tri].mean(1))]
     # orient CCW
     a, b, c = xy[tri[:, 0]], xy[tri[:, 1]], xy[tri[:, 2]]
     cr = (b[:, 0] - a[:, 0]) * (c[:, 1] - a[:, 1]) - (b[:, 1] - a[:, 1]) * (c[:, 0] - a[:, 0])
@@ -156,7 +173,10 @@ def mesh_flat(outline: np.ndarray, slits: np.ndarray, attach_pts: np.ndarray, h:
     remap = -np.ones(len(xy), int)
     remap[used] = np.arange(len(used))
     loops = [(remap[a], remap[b]) for a, b in loops]
-    return FlatMesh(xy[used], remap[tri], remap[attach], loops)
+    hloops = [remap[ids] for ids in hole_ids]
+    if any((hl < 0).any() for hl in hloops):
+        raise ValueError("hole boundary node not used by any triangle (hole too close to another cut or the edge)")
+    return FlatMesh(xy[used], remap[tri], remap[attach], loops, hloops)
 
 
 # ------------------------------------------------------------------------------------------- operators
@@ -237,15 +257,26 @@ class Canopy3D:
         w = 0.5 * np.linalg.norm(np.cross(b - a, c - a), axis=1)
         return ((a + b + c) / 3 * w[:, None]).sum(0) / w.sum()
 
+    def hole_openings_proj(self) -> float:
+        """Total open area of the cut-outs projected on the plane normal to the canopy axis."""
+        tot = 0.0
+        for ids in getattr(self.flat, "hole_loops", []):
+            P = self.X[ids, :2]
+            tot += abs(0.5 * float(np.dot(P[:, 0], np.roll(P[:, 1], -1)) - np.dot(np.roll(P[:, 0], -1), P[:, 1])))
+        return tot
+
     def summary(self) -> dict:
         Ap = self.projected_area()
         so = self.slit_openings()
-        open_proj = sum(s["area_proj_m2"] for s in so)
+        slit_proj = sum(s["area_proj_m2"] for s in so)
+        hole_proj = self.hole_openings_proj()
+        open_proj = slit_proj + hole_proj
         z = self.X[:, 2]
         return {"projected_area_m2": Ap, "projected_diameter_m": math.sqrt(4 * Ap / math.pi),
-                "surface_area_m2": self.surface_area(), "slit_open_area_proj_m2": open_proj,
+                "surface_area_m2": self.surface_area(), "slit_open_area_proj_m2": slit_proj,
+                "hole_open_area_proj_m2": hole_proj,
                 "slit_open_area_3d_m2": sum(s["area_3d_m2"] for s in so),
-                "porosity_proj": open_proj / (Ap + open_proj) if so else 0.0,
+                "porosity_proj": open_proj / (Ap + open_proj) if open_proj > 0 else 0.0,
                 "max_slit_gap_m": max([s["max_gap_m"] for s in so], default=0.0),
                 "height_m": float(z.max() - z[self.attach].mean()),
                 "apex_above_anchors_m": float(z.max() - self.anchors[:, 2].mean()), "centroid_m": self.centroid().tolist(), **self.info}
@@ -254,7 +285,7 @@ class Canopy3D:
 def form_find(design: Design, cfg: dict | None = None, *, h: float = 0.004, pressure: float | None = None,
               Et: float = 2.0e3, bend: float = 8.3e-5, line_EA: float = 500.0, line_length: float | None = None,
               attach: str = "geometry", method: str = "fire", max_iter: int = 40000, tol: float = 2e-3,
-              comp: float = 5e-4, verbose: bool = False) -> Canopy3D:
+              comp: float = 5e-4, verbose: bool = False, flutter_avg: int | None = None) -> Canopy3D:
     """Inflate a canopy design by dynamic relaxation.
 
     Sheet (assumption, L2): generic 0.1 mm plastic, E ~ 1 GPa -> bending B = E t^3/12 = 8.3e-5 N m.
@@ -266,10 +297,11 @@ def form_find(design: Design, cfg: dict | None = None, *, h: float = 0.004, pres
     sheet; regularises the tension-only switching so the relaxation converges (comp = 0 chatters).
     tol: RMS residual force on membrane nodes relative to the nodal pressure force.
     """
+    from chutesim.cutouts import build_any_geometry
     from chutesim.geometry import boundary_radius
     from chutesim.payload import anchors_m, line_angles
     cfg = cfg or load_config()
-    g = build_geometry(design, cfg)
+    g = build_any_geometry(design, cfg)
     rho = float(cfg["physics"]["rho"])
     p = 0.5 * rho * 7.0**2 if pressure is None else float(pressure)
     Lline = float(cfg["canopy"]["line_length_m"]) if line_length is None else float(line_length)
@@ -287,18 +319,28 @@ def form_find(design: Design, cfg: dict | None = None, *, h: float = 0.004, pres
     order = [int(np.argmin(np.abs(np.angle(np.exp(1j * (aa - t)))))) for t in pa]
     # cuts shorter than h/4 are below mesh resolution (and physically negligible): not cut
     slits = g.slits[np.linalg.norm(g.slits[:, 1] - g.slits[:, 0], axis=1) >= 0.25 * h] if len(g.slits) else g.slits
-    fm = mesh_flat(g.outline, slits, apts, h)
+    fm = mesh_flat(g.outline, slits, apts, h, holes=getattr(g, "holes", []))
+    from chutesim.freeform import FreeDesign
+    if flutter_avg is None:  # free-form canopies: average a fluttering shape instead of running 40k iterations
+        flutter_avg = 16 if isinstance(design, FreeDesign) else 0
+    if flutter_avg and max_iter == 40000:
+        max_iter = 12000
     return relax(fm, anchors[order], p=p, Et=Et, bend=bend, line_EA=line_EA, Lline=Lline, method=method,
-                 max_iter=max_iter, tol=tol, comp=comp, verbose=verbose,
-                 extra={"design": dict(q=design.q, slit_len=design.slit_len, slit_r=design.slit_r),
-                        "n_lines": len(apts), "n_slits": len(g.slits), "n_slits_cut": len(slits), "mesh_h_m": h})
+                 max_iter=max_iter, tol=tol, comp=comp, verbose=verbose, flutter_avg=flutter_avg,
+                 extra={"design": dict(q=design.q, slit_len=design.slit_len, slit_r=design.slit_r,
+                                       **(design.key_extra() if hasattr(design, "key_extra") else {})),
+                        "n_holes": len(getattr(g, "holes", [])), "n_lines": len(apts), "n_slits": len(g.slits), "n_slits_cut": len(slits), "mesh_h_m": h})
 
 
 def relax(fm: FlatMesh, anchors: np.ndarray, *, p: float, Et: float, bend: float, line_EA: float, Lline: float,
           method: str = "fire", max_iter: int = 40000, tol: float = 2e-3, comp: float = 0.0,
-          shape_tol: float = 5e-5, verbose: bool = False, extra: dict | None = None) -> Canopy3D:
+          shape_tol: float = 5e-5, verbose: bool = False, extra: dict | None = None,
+          flutter_avg: int = 0) -> Canopy3D:
     """Explicit relaxation to static equilibrium. method: 'fire' (FIRE, Bitzek 2006, mass-preconditioned)
-    or 'kd' (Barnes kinetic damping). Fixed anchors (k,3), one line per fm.attach node."""
+    or 'kd' (Barnes kinetic damping). Fixed anchors (k,3), one line per fm.attach node.
+    flutter_avg > 0: if not converged at max_iter, return the mean of the last flutter_avg shape snapshots
+    (taken every 250 iterations) and report the flutter amplitude (max node standard deviation); free flaps
+    of free-form canopies keep oscillating in the quasi-static model instead of settling."""
     xy, tris = fm.xy, fm.tris
     n = len(xy)
     B = float(bend)
@@ -354,6 +396,7 @@ def relax(fm: FlatMesh, anchors: np.ndarray, *, p: float, Et: float, bend: float
     res = np.inf
     Xprev = None
     dX = np.inf
+    snaps = []
     for it in range(1, max_iter + 1):
         F, Tl = forces(X)
         if method == "fire":
@@ -384,16 +427,25 @@ def relax(fm: FlatMesh, anchors: np.ndarray, *, p: float, Et: float, bend: float
             dX = float(np.abs(X - Xprev).max()) if Xprev is not None else np.inf
             Xprev = X.copy()
             hist.append((it, res, dX))
+            if flutter_avg:
+                snaps = (snaps + [X.copy()])[-flutter_avg:]
             if verbose:
                 print(f"it {it} res {res:.2e} dX {dX:.1e} dt {dt:.2f} line T {Tl.mean():.4f} N")
             # converged: force residual small, or shape stationary (max nodal move over 250 its < shape_tol)
             if res < tol or (it > 4000 and dX < shape_tol):
                 break
+    converged = bool(res < tol or dX < shape_tol)
+    flutter = {}
+    if not converged and flutter_avg and len(snaps) >= 2:
+        S_ = np.array(snaps)
+        X = S_.mean(0)
+        flutter = {"flutter_averaged": True, "flutter_snapshots": len(snaps),
+                   "flutter_amp_m": float(np.linalg.norm(S_.std(0), axis=1).max())}
     F, Tl = forces(X)
     res = resid(F)
     strain = np.linalg.norm(X[ib] - X[ia], axis=1) / L0 - 1
-    info = {"iterations": it, "residual_rel": res, "shape_change_m": dX,
-            "converged": bool(res < tol or dX < shape_tol), "method": method, "comp": comp,
+    info = {"iterations": it, "residual_rel": res, "shape_change_m": dX, **flutter,
+            "converged": converged, "method": method, "comp": comp,
             "pressure_Pa": p, "Et_N_per_m": Et, "bend_Nm": B, "line_EA_N": line_EA, "line_length_m": Lline,
             "line_tension_N": Tl.tolist(), "max_strain": float(strain.max()), "n_nodes": n,
             "n_tris": len(tris), "slack_lines": int((Tl <= 0).sum()), "residual_history": hist, **(extra or {})}

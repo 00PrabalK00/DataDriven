@@ -14,7 +14,7 @@ import os
 import re
 import shutil
 import time
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from pathlib import Path
 
 import numpy as np
@@ -53,6 +53,8 @@ class SolverParams:
     transient: bool = False         # pimpleFoam continuation from the steady solution
     t_transient: float = 0.6        # s of physical time (several shedding periods at St ~ 0.13)
     co_max: float = 2.0
+    force_transient: bool = False   # run the pimpleFoam continuation even when the steady forces converged
+    sample_dt: float = 0.0          # > 0: sample the flow planes every sample_dt s of transient time (videos)
 
 
 def _vec(v) -> str:
@@ -311,10 +313,12 @@ def _write_controls(case: Path, *, solver: SolverParams, cofr, D, Aref, alpha_de
     residuals {{ type solverInfo; libs (utilityFunctionObjects); fields (U p k omega); writeResidualFields no; }}
 """
     if sample:
+        wc = (f"writeControl adjustableRunTime; writeInterval {solver.sample_dt:.6g};"
+              if transient and solver.sample_dt > 0 else "writeControl writeTime;")
         fo += f"""
     planes
     {{
-        type surfaces; libs (sampling); writeControl writeTime; surfaceFormat raw; fields (U p);
+        type surfaces; libs (sampling); {wc} surfaceFormat raw; fields (U p);
         interpolationScheme cellPoint;
         surfaces
         {{
@@ -536,13 +540,23 @@ def run_stl(stl: Path, *, name: str, D: float, Aref: float, cofr, alpha_deg: flo
                       mesh=mesh, solver=solver, sample=sample)
     t0 = time.time()
     rc = runner.run_script(case, allrun(n_procs, solver), case / "log.Allrun")
-    res = {"name": name, "rc": rc, "alpha_deg": alpha_deg, "n_procs": n_procs, **asdict(mesh),
+    skipped_potential = False
+    if rc == 15 and solver.potential_init:
+        # potentialFoam can hit a floating-point exception on meshes with a few highly skewed faces (e.g. around
+        # sharp free-form holes); it is only an initial guess, so rerun the case starting from uniform flow
+        shutil.copy(case / "log.potentialFoam", case / "log.potentialFoam.failed")
+        meta = write_case(case, stl, D=D, Aref=Aref, cofr=cofr, alpha_deg=alpha_deg, n_procs=n_procs,
+                          mesh=mesh, solver=solver, sample=sample)
+        solver = replace(solver, potential_init=False)
+        rc = runner.run_script(case, allrun(n_procs, solver), case / "log.Allrun")
+        skipped_potential = True
+    res = {"name": name, "rc": rc, "potential_init_skipped": skipped_potential, "alpha_deg": alpha_deg, "n_procs": n_procs, **asdict(mesh),
            "n_iter_max": solver.n_iter, **{f"mesh_{k}": v for k, v in meta.items()}}
     if rc == 0:
         res.update(parse_results(case, alpha_deg=alpha_deg, Aref=Aref, D=D, cofr=cofr, conf=conf,
                                  avg_frac=solver.avg_frac))
         res["steady"] = {k: res.get(k) for k in ("Cd", "CdA_m2", "Cm", "drag_std_rel", "converged")}
-        if solver.transient and not res.get("converged", False):
+        if solver.transient and (solver.force_transient or not res.get("converged", False)):
             t_steady = res["t_end"]
             _write_controls(case, solver=solver, cofr=cofr, D=D, Aref=Aref, alpha_deg=alpha_deg,
                             sample=sample, center=np.array(meta["center"]), transient=True)
@@ -581,6 +595,8 @@ def _fix_transient_schemes(case: Path) -> None:
 def design_key(design, extra: dict | None = None) -> str:
     d = {"q": float(design.q), "slit_len": float(design.slit_len), "slit_r": float(design.slit_r),
          "radial": [float(v) for v in design.radial] if design.radial is not None else None, **(extra or {})}
+    if hasattr(design, "key_extra"):  # cut-out / free-form designs only: keys of existing results unchanged
+        d |= {k: v for k, v in design.key_extra().items() if not k.endswith("_src")}
     return hashlib.sha256(json.dumps(d, sort_keys=True).encode()).hexdigest()[:10]
 
 
@@ -621,6 +637,8 @@ def run_case(design, alpha_deg: float, n_procs: int = 8, level: int = 5, *, solv
                   mesh=mesh, solver=solver, conf=c.anchors.mean(0), sample=sample, keep=keep, log_dir=log_dir)
     s = c.summary()
     res.update({"design_key": key, "q": design.q, "slit_len": design.slit_len, "slit_r": design.slit_r,
+                "cut": json.dumps(design.key_extra()) if hasattr(design, "key_extra") else None,
+                "hole_open_area_proj_m2": s.get("hole_open_area_proj_m2", 0.0),
                 "projected_area_m2": s["projected_area_m2"], "porosity_proj": s["porosity_proj"],
                 "slit_open_area_proj_m2": s["slit_open_area_proj_m2"], "height_m": s["height_m"],
                 "CdA_proj_ratio": res.get("CdA_m2", float("nan")) / s["projected_area_m2"]})

@@ -1,6 +1,8 @@
 """Batch CFD runner: designs (JSON) x alpha in {0, 10} -> results/cfd/cfd_results.csv (incremental, resumable).
 
-designs JSON: [{"name": "...", "q": 8, "slit_len": 0.15, "slit_r": 0.45, "radial": null}, ...]
+designs JSON: [{"name": "...", "q": 8, "slit_len": 0.15, "slit_r": 0.45, "radial": null, "cut": null}, ...]
+(cut = chutesim.cutouts tuple: [vent_frac, hole_frac, n_holes, hole_r, hole_aspect, hole_p, hole_rot_deg];
+ or {"name": "...", "free": [weights...], "sym": "D6"} for a free-form design, chutesim.freeform)
 Usage (server): CFD_BACKEND=native python -m cfd.batch designs.json --jobs 12 --procs 32 --level 7
 Form-finding runs first (process pool), then CFD cases run `--jobs` at a time with `--procs` MPI ranks each.
 A row is skipped when (design_key, alpha, level) is already in the CSV with ok=True.
@@ -28,13 +30,21 @@ COLS = ["name", "design_key", "q", "slit_len", "slit_r", "alpha_deg", "level", "
         "solver_used", "CdA_m2", "Cd", "Cl", "Cm", "Cm_conf", "drag_N", "lift_N", "force_N", "moment_Nm",
         "moment_conf_Nm", "cofr_m", "drag_std_rel", "drag_trend_rel", "projected_area_m2", "porosity_proj",
         "slit_open_area_proj_m2", "height_m", "CdA_proj_ratio", "cells", "n_procs", "runtime_s", "timings_s",
-        "backend", "foam_version", "foam_build", "image", "host", "finished"]
+        "backend", "foam_version", "foam_build", "image", "host", "finished",
+        "hole_open_area_proj_m2", "cut"]  # appended last: rows of existing CSVs keep their column order
 _lock = threading.Lock()
 
 
 def _design(d: dict) -> Design:
-    return Design(float(d.get("q", 2.0)), float(d.get("slit_len", 0.0)), float(d.get("slit_r", 0.45)),
-                  tuple(d["radial"]) if d.get("radial") else None)
+    if d.get("free") is not None:
+        from chutesim.freeform import free_design
+        return free_design(d["free"], d.get("sym", "D6"))
+    args = (float(d.get("q", 2.0)), float(d.get("slit_len", 0.0)), float(d.get("slit_r", 0.45)),
+            tuple(d["radial"]) if d.get("radial") else None)
+    if d.get("cut"):
+        from chutesim.cutouts import CutDesign
+        return CutDesign(*args, tuple(d["cut"]))
+    return Design(*args)
 
 
 def done_keys(csv_path: Path) -> set:
