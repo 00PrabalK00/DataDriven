@@ -17,77 +17,370 @@
   "canopy": {
     "A0_m2": 0.025,
     "mass_kg": 0.003,
-    "n_lines": 8,
+    "n_lines": 6,
     "line_angles": "from_payload_anchors",
     "line_length_m": 0.35,
     "attach_inset_m": 0.01,
     "attach_patch_radius_m": 0.012,
-    "n_slits": 4,
+    "n_slits": 6,
     "slit_angle_offset_deg": 0.0,
     "slit_width_m": 0.0,
     "edge_margin_m": 0.01,
     "min_bridge_m": 0.008,
     "zero_slit_canonical_r": 0.45,
     "outline_points": 720,
-    "bounds": {"q": [2.0, 8.0], "slit_len": [0.0, 0.25], "slit_r": [0.25, 0.65]}
+    "bounds": {
+      "q": [
+        2.0,
+        8.0
+      ],
+      "slit_len": [
+        0.0,
+        0.25
+      ],
+      "slit_r": [
+        0.25,
+        0.65
+      ]
+    },
+    "n_note": "payload V2: 6 line slots (lines at 30+60k deg); 6 slits midway between lines (0+60k deg)"
   },
   "payload": {
-    "model": "payload_v1",
-    "note": "Parachute payload V1 (CAD handoff 2026-10-13): 80x80 mm platform, hinged electronics lid, 8 eyelet anchors. Mass NOT weighed: nominal 0.090 kg, sensitivity 0.080-0.105 kg.",
-    "assets_dir": "assets/payload_v1",
-    "visual_meshes": [{"file": "body.stl", "rgb": [0.95, 0.45, 0.1]}, {"file": "lid.stl", "rgb": [0.2, 0.45, 0.85]}],
+    "model": "payload_v2",
+    "note": "Parachute payload V2 (CAD handoff 2026-10-29): 90 mm disc with 6 line slots, octagonal electronics box + cap (assumed seated on the box). Mass NOT weighed: nominal 0.095 kg, sensitivity 0.085-0.115 kg.",
+    "assets_dir": "assets/payload_v2",
+    "visual_meshes": [
+      {
+        "file": "base_frame.stl",
+        "rgb": [
+          0.95,
+          0.45,
+          0.1
+        ]
+      },
+      {
+        "file": "cap_frame.stl",
+        "rgb": [
+          0.2,
+          0.45,
+          0.85
+        ]
+      }
+    ],
     "mesh_scale": 0.001,
-    "mass_kg": 0.090,
-    "mass_sweep_kg": [0.080, 0.105],
+    "mass_kg": 0.095,
+    "mass_sweep_kg": [
+      0.085,
+      0.115
+    ],
     "parts": [
-      {"name": "enclosure_print", "kind": "meshes", "files": ["body.stl", "lid.stl"], "mass_kg": 0.033},
-      {"name": "battery_9v", "kind": "box", "size_m": [0.0265, 0.0485, 0.0175], "center_m": [0.0022, 0.0, 0.01075], "mass_kg": 0.0455},
-      {"name": "esp32", "kind": "box", "size_m": [0.018, 0.022, 0.004], "center_m": [0.0022, -0.008, 0.023], "mass_kg": 0.004},
-      {"name": "bno085", "kind": "box", "size_m": [0.018, 0.025, 0.003], "center_m": [0.0022, 0.010, 0.023], "mass_kg": 0.0025},
-      {"name": "wiring_regulator", "kind": "box", "size_m": [0.02, 0.03, 0.01], "center_m": [0.0022, 0.0, 0.018], "mass_kg": 0.005}
+      {
+        "name": "enclosure_print",
+        "kind": "meshes",
+        "files": [
+          "base_frame.stl",
+          "cap_frame.stl"
+        ],
+        "mass_kg": 0.035
+      },
+      {
+        "name": "battery_9v",
+        "kind": "box",
+        "size_m": [
+          0.0485,
+          0.0265,
+          0.0175
+        ],
+        "center_m": [
+          0.0015000019073486328,
+          -2.500724792480469e-05,
+          0.0225
+        ],
+        "mass_kg": 0.0455
+      },
+      {
+        "name": "esp32s3",
+        "kind": "box",
+        "size_m": [
+          0.021,
+          0.0175,
+          0.004
+        ],
+        "center_m": [
+          -0.008499998092651367,
+          -2.500724792480469e-05,
+          0.036
+        ],
+        "mass_kg": 0.003
+      },
+      {
+        "name": "bno085",
+        "kind": "box",
+        "size_m": [
+          0.018,
+          0.025,
+          0.003
+        ],
+        "center_m": [
+          0.013500001907348633,
+          -2.500724792480469e-05,
+          0.036
+        ],
+        "mass_kg": 0.0025
+      },
+      {
+        "name": "wiring_regulator",
+        "kind": "box",
+        "size_m": [
+          0.02,
+          0.03,
+          0.01
+        ],
+        "center_m": [
+          0.0015000019073486328,
+          -2.500724792480469e-05,
+          0.038
+        ],
+        "mass_kg": 0.009
+      }
     ],
-    "extent_min_m": [-0.040, -0.040, -0.010],
-    "extent_max_m": [0.040, 0.040, 0.030],
-    "anchors_mm": [[38.75, 18.99, 13.006], [18.988, 38.75, 13.0], [-18.988, 38.75, 13.0], [-38.75, 18.99, 13.006],
-                   [-38.75, -18.99, 13.006], [-18.988, -38.75, 13.0], [18.988, -38.75, 13.0], [38.75, -18.99, 13.006]],
-    "anchors_note": "Eyelet hole centres (r = 3 mm) extracted from body.stl cross-sections; ordered by azimuth.",
+    "extent_min_m": [
+      -0.045,
+      -0.045,
+      0.0
+    ],
+    "extent_max_m": [
+      0.045,
+      0.045,
+      0.05
+    ],
+    "anchors_mm": [
+      [
+        34.647,
+        19.979,
+        50.0
+      ],
+      [
+        0.0,
+        39.875,
+        50.0
+      ],
+      [
+        -34.647,
+        19.979,
+        50.0
+      ],
+      [
+        -34.65,
+        -20.026,
+        50.0
+      ],
+      [
+        0.0,
+        -40.125,
+        50.0
+      ],
+      [
+        34.65,
+        -20.026,
+        50.0
+      ]
+    ],
+    "anchors_note": "Centres of the 6 rim slots (found from base.stl) on the disc upper face (flight orientation: disc on top, box below); ordered by azimuth.",
     "collision": [
-      {"type": "box", "center_m": [0.0, 0.0, 0.005], "half_m": [0.040, 0.040, 0.005]},
-      {"type": "box", "center_m": [0.00225, 0.0, 0.020], "half_m": [0.01725, 0.0255, 0.010]},
-      {"type": "cylinder", "center_m": [0.035, 0.035, -0.005], "radius_m": 0.004, "half_len_m": 0.005},
-      {"type": "cylinder", "center_m": [-0.035, 0.035, -0.005], "radius_m": 0.004, "half_len_m": 0.005},
-      {"type": "cylinder", "center_m": [-0.035, -0.035, -0.005], "radius_m": 0.004, "half_len_m": 0.005},
-      {"type": "cylinder", "center_m": [0.035, -0.035, -0.005], "radius_m": 0.004, "half_len_m": 0.005}
+      {
+        "type": "cylinder",
+        "center_m": [
+          0.0,
+          0.0,
+          0.0475
+        ],
+        "radius_m": 0.045,
+        "half_len_m": 0.0025
+      },
+      {
+        "type": "box",
+        "center_m": [
+          0.0015,
+          -0.0,
+          0.029
+        ],
+        "half_m": [
+          0.0337,
+          0.0262,
+          0.016
+        ]
+      },
+      {
+        "type": "box",
+        "center_m": [
+          0.0015,
+          -0.0,
+          0.0065
+        ],
+        "half_m": [
+          0.03725,
+          0.02975,
+          0.0065
+        ]
+      }
     ],
-    "imu_offset_m": [0.0022, 0.010, 0.023],
-    "imu_mount_rpy_deg": [0.0, 0.0, 0.0],
-    "Cd_box": 1.17,
-    "rot_damping": 2e-5,
-    "color_rgb": [0.95, 0.45, 0.1],
+    "imu_offset_m": [
+      0.0135,
+      -0.0,
+      0.036
+    ],
+    "imu_mount_rpy_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rot_damping": 2e-05,
+    "color_rgb": [
+      0.95,
+      0.45,
+      0.1
+    ],
     "markers": [],
-    "markers_note": "No ArUco markers: the tallest outward face (10 mm rim) is too small to be read at ~2 m. Camera tracking uses colour + depth (position only).",
     "marker_dictionary": "DICT_4X4_50",
+    "Cd_box": 0.92,
+    "Cd_box_note": "flight orientation box-down: frontal area ~ disc (pi*0.045^2) seen from below; Cd 1.17 on the disc area expressed on the 90x90 mm extent square",
+    "markers_note": "No ArUco markers on V2 either (faces too small at ~2 m). Camera tracking: colour + depth (position only).",
     "led_windows": [
-      {"center_m": [0.0406, 0.0, 0.006], "normal": [1, 0, 0], "size_m": [0.03, 0.006]},
-      {"center_m": [0.0, 0.0406, 0.006], "normal": [0, 1, 0], "size_m": [0.03, 0.006]},
-      {"center_m": [-0.0406, 0.0, 0.006], "normal": [-1, 0, 0], "size_m": [0.03, 0.006]},
-      {"center_m": [0.0, -0.0406, 0.006], "normal": [0, -1, 0], "size_m": [0.03, 0.006]},
-      {"center_m": [0.0022, 0.0, 0.0306], "normal": [0, 0, 1], "size_m": [0.02, 0.03]},
-      {"center_m": [0.0, 0.0, -0.0006], "normal": [0, 0, -1], "size_m": [0.03, 0.03]}
-    ]
+      {
+        "center_m": [
+          0.0352,
+          0.0,
+          0.029
+        ],
+        "normal": [
+          1,
+          0,
+          0
+        ],
+        "size_m": [
+          0.03,
+          0.006
+        ]
+      },
+      {
+        "center_m": [
+          0.0015,
+          0.0262,
+          0.029
+        ],
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "size_m": [
+          0.03,
+          0.006
+        ]
+      },
+      {
+        "center_m": [
+          -0.0322,
+          0.0,
+          0.029
+        ],
+        "normal": [
+          -1,
+          0,
+          0
+        ],
+        "size_m": [
+          0.03,
+          0.006
+        ]
+      },
+      {
+        "center_m": [
+          0.0015,
+          -0.0262,
+          0.029
+        ],
+        "normal": [
+          0,
+          -1,
+          0
+        ],
+        "size_m": [
+          0.03,
+          0.006
+        ]
+      },
+      {
+        "center_m": [
+          0.0015,
+          0.0,
+          0.0506
+        ],
+        "normal": [
+          0,
+          0,
+          1
+        ],
+        "size_m": [
+          0.02,
+          0.03
+        ]
+      },
+      {
+        "center_m": [
+          0.0015,
+          0.0,
+          -0.0006
+        ],
+        "normal": [
+          0,
+          0,
+          -1
+        ],
+        "size_m": [
+          0.03,
+          0.03
+        ]
+      }
+    ],
+    "led_windows_note": "ASSUMED LED window positions on V2 (box sides, cap top, disc bottom); update once the LED placement is known."
   },
   "drop": {
     "height_m": 4.0,
-    "release_xy_m": [0.0, 0.0],
+    "release_xy_m": [
+      0.0,
+      0.0
+    ],
     "hold_s": 1.0,
     "duration_s": 3.3,
-    "led_code": {"seed": 77, "start_s": 0.05, "min_interval_s": 0.06, "max_interval_s": 0.16}
+    "led_code": {
+      "seed": 77,
+      "start_s": 0.05,
+      "min_interval_s": 0.06,
+      "max_interval_s": 0.16
+    }
   },
   "contact": {
-    "pad_size_m": [0.4, 0.4, 0.02],
-    "pad_solref": [0.002, 1.0],
-    "pad_solimp": [0.9, 0.95, 0.001],
-    "friction": [0.8, 0.005, 0.0001]
+    "pad_size_m": [
+      0.4,
+      0.4,
+      0.02
+    ],
+    "pad_solref": [
+      0.002,
+      1.0
+    ],
+    "pad_solimp": [
+      0.9,
+      0.95,
+      0.001
+    ],
+    "friction": [
+      0.8,
+      0.005,
+      0.0001
+    ]
   },
   "scenario": {
     "version": "scn-v1",
@@ -100,7 +393,10 @@
     "area_err_sd": 0.02,
     "slit_len_err_sd_m": 0.002,
     "rho_sd_frac": 0.02,
-    "k_initial_frac": [0.15, 0.45],
+    "k_initial_frac": [
+      0.15,
+      0.45
+    ],
     "wind_sd_mps": 0.05,
     "cam_calib_rot_sd_deg": 0.3,
     "cam_calib_trans_sd_m": 0.005
@@ -110,7 +406,10 @@
     "jitter_sd_s": 0.0002,
     "dropout_prob": 0.005,
     "clock_drift_ppm_sd": 30.0,
-    "clock_offset_s": [5.0, 50.0],
+    "clock_offset_s": [
+      5.0,
+      50.0
+    ],
     "accel_range_mps2": 78.45,
     "gyro_range_rps": 34.9,
     "accel_lsb": 0.00390625,
@@ -125,29 +424,74 @@
   },
   "camera": {
     "model": "D435i-like",
-    "color": {"width": 848, "height": 480, "fps": 60, "fx": 615.0, "fy": 615.0, "cx": 423.5, "cy": 239.5},
-    "depth": {"width": 848, "height": 480, "fps": 60, "fx": 430.0, "fy": 430.0, "cx": 423.5, "cy": 239.5,
-              "baseline_m": 0.05, "subpixel": 0.08, "min_m": 0.28, "max_m": 6.0, "unit_m": 0.001,
-              "random_hole_prob": 0.005, "flying_pixel_prob": 0.3},
-    "depth_to_color_m": [0.015, 0.0, 0.0],
-    "position_m": [0.0, -1.8, 0.80],
-    "look_at_m": [0.0, 0.0, 0.70],
+    "color": {
+      "width": 848,
+      "height": 480,
+      "fps": 60,
+      "fx": 615.0,
+      "fy": 615.0,
+      "cx": 423.5,
+      "cy": 239.5
+    },
+    "depth": {
+      "width": 848,
+      "height": 480,
+      "fps": 60,
+      "fx": 430.0,
+      "fy": 430.0,
+      "cx": 423.5,
+      "cy": 239.5,
+      "baseline_m": 0.05,
+      "subpixel": 0.08,
+      "min_m": 0.28,
+      "max_m": 6.0,
+      "unit_m": 0.001,
+      "random_hole_prob": 0.005,
+      "flying_pixel_prob": 0.3
+    },
+    "depth_to_color_m": [
+      0.015,
+      0.0,
+      0.0
+    ],
+    "position_m": [
+      0.0,
+      -1.8,
+      0.8
+    ],
+    "look_at_m": [
+      0.0,
+      0.0,
+      0.45
+    ],
     "exposure_s": 0.002,
     "blur_subframes": 3,
     "rgb_noise_sd": 2.0,
     "depth_phase_s": 0.004,
     "frame_jitter_sd_s": 0.0003,
     "frame_drop_prob": 0.005,
-    "host_clock_offset_s": [100.0, 200.0],
-    "jpeg_quality": 92
+    "host_clock_offset_s": [
+      100.0,
+      200.0
+    ],
+    "jpeg_quality": 92,
+    "aim_note": "aim 0.45 m above the pad (2026-10-30): keeps the landing pad in frame so the LED stays visible after impact (clock-sync edges) and the camera sees the box airborne -> on the pad"
   },
   "pipeline": {
     "version_note": "pipeline version = hash of pipeline/*.py + this section",
     "led_green_min": 200,
     "led_other_max": 120,
     "led_min_pixels": 6,
-    "box_hsv_lo": [5, 120, 120],
-    "box_hsv_hi": [22, 255, 255],
+    "box_hsv_lo": [
+      5,
+      120,
+      120
+    ],
+    "box_hsv_hi": [
+      22,
+      255,
+      255
+    ],
     "fallback_min_pixels": 40,
     "release_fmag_g": 0.5,
     "release_hold_s": 0.02,
@@ -160,11 +504,21 @@
     "decel_window_from_release_s": 0.3,
     "decel_factor_vs_box": 1.5,
     "ekf": {
-      "accel_noise": 0.3, "gyro_noise": 0.01, "accel_bias_rw": 0.01, "gyro_bias_rw": 0.001,
-      "pos_sd_pnp_lateral": 0.01, "pos_sd_pnp_axial": 0.04, "pos_sd_depth": 0.015, "pos_sd_fallback": 0.04,
-      "att_sd_pnp_deg": 4.0, "init_pos_sd_m": 0.1, "yaw_reset_deg": 20.0
+      "accel_noise": 0.3,
+      "gyro_noise": 0.01,
+      "accel_bias_rw": 0.01,
+      "gyro_bias_rw": 0.001,
+      "pos_sd_pnp_lateral": 0.01,
+      "pos_sd_pnp_axial": 0.04,
+      "pos_sd_depth": 0.015,
+      "pos_sd_fallback": 0.04,
+      "att_sd_pnp_deg": 4.0,
+      "init_pos_sd_m": 0.1,
+      "yaw_reset_deg": 20.0
     },
-    "cam_only": {"accel_psd": 30.0}
+    "cam_only": {
+      "accel_psd": 30.0
+    }
   },
   "objective": {
     "drift_limit_mps": 0.5,
@@ -183,5 +537,7 @@
     "model": "prior-v1",
     "note": "HEURISTIC PLACEHOLDER (L2): drag/opening/oscillation/failure assumptions programmed from geometry features. Slits do not open physically in the rigid canopy; their effect enters only through this map."
   },
-  "retention": {"keep_frames_fraction": 0.002}
+  "retention": {
+    "keep_frames_fraction": 0.002
+  }
 }

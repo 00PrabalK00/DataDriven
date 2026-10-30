@@ -1,0 +1,72 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:                                        |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : OPENFOAM=1912 patch=200626
+Arch   : "LSB;label=32;scalar=64"
+Exec   : surfaceFeatureExtract
+Date   : Oct 30 2026
+Time   : 05:24:50
+Host   : 4d4a97c5e6b0
+PID    : 12344
+I/O    : uncollated
+Case   : /root/DataDriven/results/cfd/cases/val_cup_L5v1912
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+
+Note: Feature line extraction only valid on closed manifold surfaces
+
+Reading surfaceFeatureExtractDict
+
+Surfaces     : canopy.stl
+Output       : canopy
+Load options : offset
+Write options: writeObj=no writeVTK=off
+
+Statistics:
+Triangles    : 9600 in 1 region(s)
+Vertices     : 4921
+Bounding Box : (-0.090000004 -0.090000004 -3.4457118e-17) (0.090000004 0.090000004 0.090000004)
+
+Constructing feature set from included angle 60
+Selecting edges based purely on geometric tests: no
+
+Initial Feature set:
+    points : 0
+    edges  : 240
+    of which
+        region edges   : 240
+        external edges : 0
+        internal edges : 0
+
+Final Feature set:
+    points : 240
+    of which
+        convex             : 0
+        concave            : 0
+        mixed              : 0
+        non-feature        : 240
+    edges  : 240
+    of which
+        external edges     : 0
+        internal edges     : 0
+        flat edges         : 0
+        open edges         : 240
+        multiply connected : 0
+
+Writing extendedFeatureEdgeMesh to "/root/DataDriven/results/cfd/cases/val_cup_L5v1912/constant/extendedFeatureEdgeMesh/canopy.extendedFeatureEdgeMesh"
+
+Writing featureEdgeMesh to "/root/DataDriven/results/cfd/cases/val_cup_L5v1912/constant/triSurface/canopy.eMesh"
+ExecutionTime = 0.03 s  ClockTime = 0 s
+
+End
+

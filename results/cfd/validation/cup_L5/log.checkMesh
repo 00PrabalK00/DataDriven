@@ -1,0 +1,119 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2406                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _be01ca78-20240625 OPENFOAM=2406 version=2406
+Arch   : "LSB;label=32;scalar=64"
+Exec   : checkMesh -parallel -constant
+Date   : Oct 30 2026
+Time   : 04:23:07
+Host   : edf3d2380959
+PID    : 260
+I/O    : uncollated
+Case   : /case
+nProcs : 5
+Hosts  :
+(
+    (edf3d2380959 5)
+)
+Pstream initialized with:
+    floatTransfer      : false
+    maxCommsSize       : 0
+    nProcsSimpleSum    : 0
+    nonBlockingExchange: 0 (tuning: 0)
+    exchange algorithm : 0
+    commsType          : nonBlocking
+    polling iterations : 0
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = constant
+
+Check mesh...
+
+Time = constant
+
+Mesh stats 
+    points:           241414
+    faces:            659213
+    internal faces:   612037
+    cells:            203946
+    faces per cell:   6.2332676
+    boundary patches: 3 (5 7)
+    point zones:      1
+    face zones:       1
+    cell zones:       0
+
+Overall number of cells of each type:
+    hexahedra:     187892
+    prisms:        0
+    wedges:        0
+    pyramids:      0
+    tet wedges:    0
+    tetrahedra:    0
+    polyhedra:     16054
+    Breakdown of polyhedra by number of faces:
+        faces   number of cells
+            6   4717
+            9   8281
+           12   1632
+           15   1383
+           18   41
+
+Checking topology...
+    Boundary definition OK.
+    Cell to face addressing OK.
+    Point usage OK.
+    Upper triangular ordering OK.
+    Face vertices OK.
+    Number of regions: 1 (OK).
+
+Checking patch topology for multiply connected surfaces...
+                   Patch    Faces   Points  Surface topology
+                farfield     7936     8104      ok (closed singly connected)
+                  canopy    11785    12334  multiply connected (shared edge)
+            canopy_slave    11785    12334  multiply connected (shared edge)
+                    ".*"    31506    20438  multiply connected (shared edge)
+
+Detected 23599 bad edges (possibly relevant for finite-area)
+
+Checking faceZone topology for multiply connected surfaces...
+                FaceZone    Faces   Points                  Surface topology
+                  canopy    23570    12334  multiply connected (shared edge)
+  <<Writing 12329 conflicting points to set nonManifoldPoints
+
+Checking basic cellZone addressing...
+    No cellZones found.
+
+Checking basic pointZone addressing...
+               PointZone  PointsBoundingBox
+            frozenPoints       0(1e+150 1e+150 1e+150) (-1e+150 -1e+150 -1e+150)
+
+Checking geometry...
+    Overall domain bounding box (-1.427787 -1.427787 -1.382787) (1.452213 1.452213 2.757213)
+    Mesh has 3 geometric (non-empty/wedge) directions (1 1 1)
+    Mesh has 3 solution (non-empty) directions (1 1 1)
+    Boundary openness (-1.8699507e-16 -8.9584992e-17 -1.6173133e-16) OK.
+    Max cell openness = 3.7285234e-16 OK.
+    Max aspect ratio = 14.467497 OK.
+    Minimum face area = 6.3487499e-08. Maximum face area = 0.0081000439.  Face area magnitudes OK.
+    Min volume = 1.713359e-10. Max volume = 0.00072900385.  Total volume = 34.338816.  Cell volumes OK.
+    Mesh non-orthogonality Max: 64.973821 average: 8.7291289
+    Non-orthogonality check OK.
+    Face pyramids OK.
+ ***Max skewness = 9.8018393, 1 highly skew faces detected which may impair the quality of the results
+  <<Writing 1 skew faces to set skewFaces
+    Coupled point location match (average 0) OK.
+
+Failed 1 mesh checks.
+
+End
+
+Finalising parallel run

@@ -61,9 +61,51 @@ class FittedMap:
         return out
 
 
+class CfdMap:
+    """cfd-v1: drag area and pitch stability from a surrogate trained on OpenFOAM results (form-found
+    inflated canopy, RANS k-omega SST, U = 7 m/s, alpha = 0 and 10 deg). The surrogate file (pickle, written
+    by python/cfd/fit_map.py) holds models feature-vector -> CdA [m^2] and -> Cm_alpha [1/deg], the feature
+    order, and the oscillation reference. K_open = predicted CdA. Oscillation intensity scales with the
+    predicted pitch stability (more negative Cm_alpha = more self-righting = less swing), around the prior's
+    reference level. Opening time tau, rotational damping and deployment-failure probability have no CFD
+    basis: they are kept from prior-v1 and stay assumptions (evidence level L2 until real-drop calibration).
+    The version string carries the surrogate file hash, so cache keys separate every refit."""
+
+    def __init__(self, path):
+        import hashlib
+        import pickle
+        raw = open(path, "rb").read()
+        self.spec = pickle.loads(raw)
+        self.version = "cfd-v1+" + hashlib.sha256(raw).hexdigest()[:16]
+
+    def __call__(self, g: Geometry, cfg: dict) -> dict:
+        import numpy as np
+        base = prior_map(g, cfg)
+        f = base["features"]
+        x = np.array([[f[k] for k in self.spec["features"]]])
+        cda = float(self.spec["model_cda"].predict(x)[0])
+        cma = float(self.spec["model_cma"].predict(x)[0])
+        o = self.spec["osc"]
+        rel = (cma - o["cma_ref"]) / abs(o["cma_ref"])        # >0: less stable than the reference shape
+        out = dict(base)
+        out["K_open_m2"] = max(cda, 0.05 * g.A0)
+        out["osc_intensity"] = o["osc_ref"] * min(max(1.0 + o["gain"] * rel, 0.2), 3.0)
+        out["cfd_CdA_m2"] = cda
+        out["cfd_Cm_alpha_per_deg"] = cma
+        out["model"] = self.version
+        out["evidence_level"] = "L2 (CFD-informed, uncalibrated)"
+        return out
+
+
 def get_map(cfg: dict):
     m = cfg["aero"]["model"]
     if m == PRIOR_VERSION:
         return prior_map, PRIOR_VERSION
+    if m == "cfd-v1":
+        from pathlib import Path
+        from .config import REPO_ROOT
+        fp = Path(cfg["aero"]["fit_file"])
+        cm = CfdMap(fp if fp.is_absolute() else REPO_ROOT / fp)
+        return cm, cm.version
     fm = FittedMap(cfg["aero"]["fit_file"])
     return fm, fm.version

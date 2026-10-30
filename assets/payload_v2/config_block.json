@@ -1,0 +1,186 @@
+{
+ "model": "payload_v2",
+ "note": "Parachute payload V2 (CAD handoff 2026-10-29): 90 mm disc with 6 line slots, octagonal electronics box + cap (assumed seated on the box). Mass NOT weighed: nominal 0.095 kg, sensitivity 0.085-0.115 kg.",
+ "assets_dir": "assets/payload_v2",
+ "visual_meshes": [
+  {
+   "file": "base_frame.stl",
+   "rgb": [
+    0.95,
+    0.45,
+    0.1
+   ]
+  },
+  {
+   "file": "cap_frame.stl",
+   "rgb": [
+    0.2,
+    0.45,
+    0.85
+   ]
+  }
+ ],
+ "mesh_scale": 0.001,
+ "mass_kg": 0.095,
+ "mass_sweep_kg": [
+  0.085,
+  0.115
+ ],
+ "parts": [
+  {
+   "name": "enclosure_print",
+   "kind": "meshes",
+   "files": [
+    "base_frame.stl",
+    "cap_frame.stl"
+   ],
+   "mass_kg": 0.035
+  },
+  {
+   "name": "battery_9v",
+   "kind": "box",
+   "size_m": [
+    0.0485,
+    0.0265,
+    0.0175
+   ],
+   "center_m": [
+    0.0015000019073486328,
+    -2.500724792480469e-05,
+    0.0225
+   ],
+   "mass_kg": 0.0455
+  },
+  {
+   "name": "esp32s3",
+   "kind": "box",
+   "size_m": [
+    0.021,
+    0.0175,
+    0.004
+   ],
+   "center_m": [
+    -0.008499998092651367,
+    -2.500724792480469e-05,
+    0.036
+   ],
+   "mass_kg": 0.003
+  },
+  {
+   "name": "bno085",
+   "kind": "box",
+   "size_m": [
+    0.018,
+    0.025,
+    0.003
+   ],
+   "center_m": [
+    0.013500001907348633,
+    -2.500724792480469e-05,
+    0.036
+   ],
+   "mass_kg": 0.0025
+  },
+  {
+   "name": "wiring_regulator",
+   "kind": "box",
+   "size_m": [
+    0.02,
+    0.03,
+    0.01
+   ],
+   "center_m": [
+    0.0015000019073486328,
+    -2.500724792480469e-05,
+    0.038
+   ],
+   "mass_kg": 0.009
+  }
+ ],
+ "extent_min_m": [
+  -0.045,
+  -0.045,
+  0.0
+ ],
+ "extent_max_m": [
+  0.045,
+  0.045,
+  0.05
+ ],
+ "anchors_mm": [
+  [
+   34.647,
+   19.979,
+   50.0
+  ],
+  [
+   0.0,
+   39.875,
+   50.0
+  ],
+  [
+   -34.647,
+   19.979,
+   50.0
+  ],
+  [
+   -34.65,
+   -20.026,
+   50.0
+  ],
+  [
+   0.0,
+   -40.125,
+   50.0
+  ],
+  [
+   34.65,
+   -20.026,
+   50.0
+  ]
+ ],
+ "anchors_note": "Centres of the 6 rim slots (found from base.stl) on the disc upper face (flight orientation: disc on top, box below); ordered by azimuth.",
+ "collision": [
+  {
+   "type": "cylinder",
+   "center_m": [
+    0.0,
+    0.0,
+    0.0475
+   ],
+   "radius_m": 0.045,
+   "half_len_m": 0.0025
+  },
+  {
+   "type": "box",
+   "center_m": [
+    0.0015,
+    -0.0,
+    0.029
+   ],
+   "half_m": [
+    0.0337,
+    0.0262,
+    0.016
+   ]
+  },
+  {
+   "type": "box",
+   "center_m": [
+    0.0015,
+    -0.0,
+    0.0065
+   ],
+   "half_m": [
+    0.03725,
+    0.02975,
+    0.0065
+   ]
+  }
+ ],
+ "imu_offset_m": [
+  0.0135,
+  -0.0,
+  0.036
+ ]
+}

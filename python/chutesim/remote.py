@@ -63,10 +63,14 @@ SMALL_BATCH = int(os.environ.get("CHUTESIM_REMOTE_SMALL_BATCH", "5"))
 
 
 def _set_gl(backend: str):
-    """Worker initializer: choose the offscreen renderer before mujoco is imported in this process."""
+    """Worker initializer: choose the offscreen renderer before mujoco is imported in this process; EGL
+    workers are spread over the GPUs (CHUTESIM_N_GPU) by process id."""
     os.environ["MUJOCO_GL"] = backend
     os.environ["PYOPENGL_PLATFORM"] = backend
     os.environ["LP_NUM_THREADS"] = "1"
+    if backend == "egl":
+        n = int(os.environ.get("CHUTESIM_N_GPU", "1"))
+        os.environ["MUJOCO_EGL_DEVICE_ID"] = str(os.getpid() % max(n, 1))
 
 
 def _serve_conn(conn, pools, work_root: Path):

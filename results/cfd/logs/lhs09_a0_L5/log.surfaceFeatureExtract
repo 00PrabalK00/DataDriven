@@ -1,0 +1,72 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:                                        |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : OPENFOAM=1912 patch=200626
+Arch   : "LSB;label=32;scalar=64"
+Exec   : surfaceFeatureExtract
+Date   : Oct 30 2026
+Time   : 06:03:39
+Host   : 4d4a97c5e6b0
+PID    : 18767
+I/O    : uncollated
+Case   : /root/DataDriven/results/cfd/cases/canopy_3e22e4b3d5_a0_L5
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 10)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+
+Note: Feature line extraction only valid on closed manifold surfaces
+
+Reading surfaceFeatureExtractDict
+
+Surfaces     : canopy.stl
+Output       : canopy
+Load options : offset
+Write options: writeObj=no writeVTK=off
+
+Statistics:
+Triangles    : 3595 in 1 region(s)
+Vertices     : 1879
+Bounding Box : (-0.070639916 -0.067719281 0.39930794) (0.070671588 0.067552052 0.45316705)
+
+Constructing feature set from included angle 60
+Selecting edges based purely on geometric tests: no
+
+Initial Feature set:
+    points : 0
+    edges  : 173
+    of which
+        region edges   : 173
+        external edges : 0
+        internal edges : 0
+
+Final Feature set:
+    points : 173
+    of which
+        convex             : 0
+        concave            : 0
+        mixed              : 0
+        non-feature        : 173
+    edges  : 173
+    of which
+        external edges     : 0
+        internal edges     : 0
+        flat edges         : 0
+        open edges         : 173
+        multiply connected : 0
+
+Writing extendedFeatureEdgeMesh to "/root/DataDriven/results/cfd/cases/canopy_3e22e4b3d5_a0_L5/constant/extendedFeatureEdgeMesh/canopy.extendedFeatureEdgeMesh"
+
+Writing featureEdgeMesh to "/root/DataDriven/results/cfd/cases/canopy_3e22e4b3d5_a0_L5/constant/triSurface/canopy.eMesh"
+ExecutionTime = 0.01 s  ClockTime = 0 s
+
+End
+
