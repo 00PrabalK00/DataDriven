@@ -17,14 +17,20 @@ SOURCES = {
     16: "NSGA-II: Deb et al. (2002)",
 }
 
+NAMES = ('<a:t>Pranav Lavande (PL3236)</a:t></a:r><a:br><a:rPr lang="en-US" sz="1600"/></a:br>'
+         '<a:r><a:rPr b="0" lang="en-US" sz="1600" spc="-1" strike="noStrike"><a:solidFill><a:srgbClr val="e9ddf2"/></a:solidFill>'
+         '<a:latin typeface="Calibri"/></a:rPr><a:t>Walter Kimball (WSK6251)</a:t></a:r><a:br><a:rPr lang="en-US" sz="1600"/></a:br>'
+         '<a:r><a:rPr b="0" lang="en-US" sz="1600" spc="-1" strike="noStrike"><a:solidFill><a:srgbClr val="e9ddf2"/></a:solidFill>'
+         '<a:latin typeface="Calibri"/></a:rPr><a:t>Prabal Khare (PK3391)</a:t>')
+
 NOTES = {
-1: """# SPEAKER 1  ·  6 s
+1: """# PRANAV  ·  6 s
 ## SAY
-- Hi, we're Prabal, Pranav and Walter.
+- Hi, we're Pranav, Walter and Prabal.
 - Can a data-driven search beat a simple hole in the middle?
 ## IF ASKED
 - Project questions? → Which canopy lands slowest with fixed plastic and OK stability. Which course methods find good designs best.""",
-2: """# SPEAKER 1  ·  25 s  ·  CLICK VIDEO
+2: """# PRANAV  ·  25 s  ·  CLICK VIDEO
 ## SAY
 - This is a simulated drop.
 - Same 250 cm² of plastic, any 2D shape.
@@ -38,7 +44,7 @@ NOTES = {
 - Why 4 m? → At 2.5 m no design stood out, in all 27 assumption sets.
 - 8.9 m/s? → Free fall with no drag: √(2·g·h).
 - 6.3 m/s? → The vent's CFD estimate, not a measurement. 95 g payload and 3 g canopy assumed.""",
-3: """# SPEAKER 1  ·  15 s
+3: """# PRANAV  ·  15 s
 ## SAY
 - We started with slits.
 - In our model they opened under 1 mm, so almost no effect.
@@ -51,7 +57,7 @@ NOTES = {
 - 9 variables? → 61 Gaussian bumps on a hill. 6-fold symmetry groups them into 9 weights.
 - Do slits fail for real? → That's our model's result, not tested on real canopies.
 - Which weights matter? → Sobol: the outer edge weights. That's the surrogate, not CFD.""",
-4: """# SPEAKER 1  ·  20 s  ·  CLICK VIDEO
+4: """# PRANAV  ·  20 s  ·  CLICK VIDEO
 ## SAY
 - Think of a sandcastle.
 - Smooth hill, 61 spots, grouped into 9.
@@ -66,7 +72,7 @@ NOTES = {
 - Why this encoding? → Outline and holes come from one field. We never place holes by hand.
 - Is it novel? → No. Standard level-set / RBF shape method plus symmetry linking.
 - Which designs? → Real CFD designs, free56 then free07.""",
-5: """# SPEAKER 1  ·  20 s  ·  THEN HAND TO SPEAKER 2
+5: """# PRANAV  ·  20 s  ·  THEN HAND TO WALTER
 ## SAY
 - PCA, autoencoder and VAE on 1,883 shapes.
 - Scored on shapes they never trained on.
@@ -78,7 +84,7 @@ NOTES = {
 - The data? → 48 × 48 masks, held-out test shapes.
 - Why not search with the VAE? → Only 66% of its shapes were one piece.
 - Does this prove 9 weights are best? → No. Latent codes and field weights are separate.""",
-6: """# SPEAKER 2  ·  30 s  ·  CLICK VIDEO
+6: """# WALTER  ·  30 s  ·  CLICK VIDEO
 ## SAY
 - This is the whole workflow, left to right.
 - Latin hypercube sampling picks training shapes.
@@ -94,7 +100,7 @@ NOTES = {
 - Stability? → Cm_alpha = moment slope from 0° and 10°. Positive = a tilt grows.
 - Limits? → Shape from uniform pressure, no CFD feedback. Disc +5.6%, cup +6.8%.
 - Reference values? → Hoerner, Fluid-Dynamic Drag (1965).""",
-7: """# SPEAKER 2  ·  15 s
+7: """# WALTER  ·  15 s
 ## SAY
 - Here's the scale of the work.
 - 130 CFD runs → 45 converged designs.
@@ -106,7 +112,7 @@ NOTES = {
 - 130 vs 45? → 51 inflated stably, 6 didn't converge. Each design needs 2 angles.
 - Inflation classifier? → Random forest, 77% accuracy. Our addition, not a course method.
 - Real drops? → None yet. Everything here is simulation.""",
-8: """# SPEAKER 2  ·  18 s
+8: """# WALTER  ·  18 s
 ## SAY
 - All four use exactly 250 cm².
 - Central vent: 6.31 m/s.
@@ -119,7 +125,7 @@ NOTES = {
 - Numbers? → Drag area 243.6 vs 219.5 cm². Cm_alpha +2.25 vs +4.89 (×1e-3 per °).
 - Why does a hole help? → Bigger drag area, less unstable. Venting is the likely reason, untested.
 - Self-righting designs? → Only 4 of 45. The best of those lands at 6.91 m/s.""",
-9: """# SPEAKER 2  ·  12 s
+9: """# WALTER  ·  12 s  ·  THEN HAND TO PRABAL
 ## SAY
 - Each dot is one CFD design.
 - Best results around 10% open.
@@ -127,7 +133,7 @@ NOTES = {
 ## IF ASKED
 - No-hole designs? → 19 at 0% open, median 6.50 m/s.
 - Is 10% exact? → No. Only 13 designs between 1–15%, median 6.43. A region, not an optimum.""",
-10: """# SPEAKER 2  ·  10 s  ·  THEN HAND TO SPEAKER 3
+10: """# PRABAL  ·  10 s
 ## SAY
 - Left: big opening, air runs straight through.
 - Right: tilted 10°, the wake goes lopsided.
@@ -136,7 +142,7 @@ NOTES = {
 - Left design? → free03, ~26% open, self-righting, 6.91 m/s.
 - Right image? → Older slit canopy, coarse mesh. Shows the idea only.
 - Why not show the vent? → Its flow fields were lost when the rented machines shut down. Forces were saved.""",
-11: """# SPEAKER 3  ·  30 s  ·  CLICK VIDEO
+11: """# PRABAL  ·  30 s  ·  CLICK VIDEO
 ## SAY
 - The GA evolves a population of designs.
 - The surrogate scores each one's fitness.
@@ -148,12 +154,12 @@ NOTES = {
 - How? → 20 designs per generation. Keep the best, crossover, mutation. This is a real run, 10 generations.
 - Fitness? → Lowest predicted speed + 0.03 m/s test noise. Rejected = marked penalty.
 - Speed on screen? → A noisy surrogate score, not a real speed.""",
-12: """# SPEAKER 3  ·  6 s
+12: """# PRABAL  ·  6 s
 ## SAY
 - No rule told it to do this.
 ## IF ASKED
 - Did it really invent it? → It learned from CFD data that included holed designs. Open area is one of its features.""",
-13: """# SPEAKER 3  ·  15 s
+13: """# PRABAL  ·  15 s  ·  THEN HAND TO PRANAV
 ## SAY
 - This is the check.
 - GA winners predicted ~6.27 m/s.
@@ -164,7 +170,7 @@ NOTES = {
 - All five in CFD? → 6.33, 6.36, 6.41, 6.41, 6.44. The 3 GA ones are shown.
 - The other two? → Other methods, predicted within 0.01, but both ~6.40. Error grew with how hard the search pushed. Only 5 designs, so a clue.
 - Why optimistic? → Only ~40 training designs. Search hunts where the errors look good.""",
-14: """# SPEAKER 3  ·  15 s
+14: """# PRANAV  ·  15 s  ·  THEN HAND TO WALTER
 ## SAY
 - Best search winner: 6.33 in CFD.
 - Hand-made vent: 6.31.
@@ -175,7 +181,7 @@ NOTES = {
 - The vent is clearly better.
 ## IF ASKED
 - Stability? → Cm_alpha +2.53 winner vs +2.25 vent (×1e-3 per °). Neither self-righting.""",
-15: """# SPEAKER 3  ·  20 s
+15: """# WALTER  ·  20 s  ·  THEN HAND TO PRABAL
 ## SAY
 - Each method: 200 evaluations × 10 runs.
 - Score = best surrogate speed with noise. It ranks methods, not real speeds.
@@ -193,7 +199,7 @@ NOTES = {
 - GA 6.260, PSO 6.271? → Population-based, cope better with noise.
 - What is PSO? → A swarm of designs; each moves toward its own best and the swarm's best.
 - Is GA best in general? → No. One surrogate, one budget, our settings.""",
-16: """# SPEAKER 3  ·  20 s  ·  END
+16: """# PRABAL  ·  20 s  ·  END
 ## SAY
 - Same goal: lowest speed, plus stability.
 - 1. Feed CFD checks back with Bayesian optimization.
@@ -257,6 +263,10 @@ order = ["ppt/" + rid2t[r] for r in re.findall(r'<p:sldId [^>]*r:id="(rId\d+)"',
 patch = {}
 for n, path in enumerate(order, 1):
     x = zin.read(path).decode()
+    if n == 1:
+        x, k = re.subn(r'<a:t>Prabal, Pranav, Walter</a:t>', NAMES, x)
+        assert k == 1 or NAMES in x
+        patch[path] = x
     if n in SOURCES:
         x = re.sub(r'<p:sp><p:nvSpPr><p:cNvPr id="\d+" name="Source"/>.*?</p:sp>', "", x, flags=re.S)
         sid = max(int(v) for v in re.findall(r'<p:cNvPr id="(\d+)"', x)) + 1
