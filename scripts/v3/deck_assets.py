@@ -52,6 +52,18 @@ def main():
         ax.set_aspect("equal"); ax.set_xlim(-.125, .125); ax.set_ylim(-.125, .125); ax.axis("off")
         fig.subplots_adjust(0, 0, 1, 1)
         fig.savefig(OUT / f"quiz_{name}.png", dpi=220, facecolor=BG); plt.close(fig)
+    # one weight changed: the centre weight opens a hole with nothing else touched
+    from chutesim.freeform import build_free_geometry, free_design
+    for name, w9 in (("weight_0", 0.0), ("weight_hole", -1.6)):
+        g = build_free_geometry(free_design([0.0] * 8 + [w9], "D6"), cfg)
+        fig, ax = plt.subplots(figsize=(3, 3), facecolor=BG)
+        o = np.vstack([g.outline, g.outline[:1]])
+        ax.fill(o[:, 0], o[:, 1], color=LIGHT)
+        for h in g.holes:
+            ax.fill(h[:, 0], h[:, 1], color=BG)
+        ax.set_aspect("equal"); ax.set_xlim(-.125, .125); ax.set_ylim(-.125, .125); ax.axis("off")
+        fig.subplots_adjust(0, 0, 1, 1)
+        fig.savefig(OUT / f"{name}.png", dpi=220, facecolor=BG); plt.close(fig)
     # VAE samples from the rep study, recoloured for the dark slides
     im = Image.open(ROOT / "results/freeform/server_chute-a/rep/rep_overview.png").convert("L")
     W, H = im.size
