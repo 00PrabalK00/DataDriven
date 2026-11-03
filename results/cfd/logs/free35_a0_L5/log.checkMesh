@@ -1,0 +1,133 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2406                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _1653fa08-20260127 OPENFOAM=2406 patch=260127 version=2406
+Arch   : "LSB;label=32;scalar=64"
+Exec   : checkMesh -parallel -constant
+Date   : Oct 30 2026
+Time   : 21:41:20
+Host   : 8f12f0e3f6da
+PID    : 32458
+I/O    : uncollated
+Case   : /root/DataDriven/results/cfd/cases/canopy_efcdfb367c_a0_L5
+nProcs : 6
+Hosts  :
+(
+    (8f12f0e3f6da 6)
+)
+Pstream initialized with:
+    floatTransfer      : false
+    maxCommsSize       : 0
+    nProcsSimpleSum    : 0
+    nonBlockingExchange: 0 (tuning: 0)
+    exchange algorithm : 0
+    commsType          : nonBlocking
+    polling iterations : 0
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = constant
+
+Check mesh...
+
+Time = constant
+
+Mesh stats 
+    points:           196874
+    faces:            535317
+    internal faces:   495789
+    cells:            166475
+    faces per cell:   6.1937588
+    boundary patches: 3 (5 7)
+    point zones:      1
+    face zones:       1
+    cell zones:       0
+
+Overall number of cells of each type:
+    hexahedra:     155212
+    prisms:        0
+    wedges:        0
+    pyramids:      0
+    tet wedges:    0
+    tetrahedra:    0
+    polyhedra:     11263
+    Breakdown of polyhedra by number of faces:
+        faces   number of cells
+            6   2776
+            9   6974
+           12   836
+           15   602
+           18   75
+
+Checking topology...
+    Boundary definition OK.
+    Cell to face addressing OK.
+    Point usage OK.
+    Upper triangular ordering OK.
+    Face vertices OK.
+   *Number of regions: 12
+    The mesh has multiple regions which are not connected by any face.
+  <<Writing region information to "constant/cellToRegion"
+  <<Writing region 0 with 166443 cells to cellSet region0
+  <<Writing region 1 with 1 cells to cellSet region1
+  <<Writing region 2 with 10 cells to cellSet region2
+  <<Writing region 3 with 2 cells to cellSet region3
+  <<Writing region 4 with 6 cells to cellSet region4
+  <<Writing region 5 with 1 cells to cellSet region5
+  <<Writing region 6 with 1 cells to cellSet region6
+  <<Writing region 7 with 3 cells to cellSet region7
+  <<Writing region 8 with 2 cells to cellSet region8
+  <<Writing region 9 with 2 cells to cellSet region9
+  <<Writing region 10 with 1 cells to cellSet region10
+  <<Writing region 11 with 3 cells to cellSet region11
+
+Checking patch topology for multiply connected surfaces...
+                   Patch    Faces   Points  Surface topology
+                farfield     7936     8080      ok (closed singly connected)
+                  canopy     6760     7198  multiply connected (shared edge)
+            canopy_slave     6760     7198  multiply connected (shared edge)
+                    ".*"    21456    15278  multiply connected (shared edge)
+
+Detected 13012 bad edges (possibly relevant for finite-area)
+
+Checking faceZone topology for multiply connected surfaces...
+                FaceZone    Faces   Points                  Surface topology
+                  canopy    13520     7198  multiply connected (shared edge)
+  <<Writing 6958 conflicting points to set nonManifoldPoints
+
+Checking basic cellZone addressing...
+    No cellZones found.
+
+Checking basic pointZone addressing...
+               PointZone  PointsBoundingBox
+            frozenPoints       0(1e+150 1e+150 1e+150) (-1e+150 -1e+150 -1e+150)
+
+Checking geometry...
+    Overall domain bounding box (-1.4154253 -1.4157132 -1.0436404) (1.4391733 1.4388854 3.0598451)
+    Mesh has 3 geometric (non-empty/wedge) directions (1 1 1)
+    Mesh has 3 solution (non-empty) directions (1 1 1)
+    Boundary openness (5.8755096e-17 1.0251387e-16 1.1764503e-15) OK.
+    Max cell openness = 3.767297e-16 OK.
+    Max aspect ratio = 15.433515 OK.
+    Minimum face area = 3.2008863e-08. Maximum face area = 0.0079577484.  Face area magnitudes OK.
+    Min volume = 1.145361e-10. Max volume = 0.00070988047.  Total volume = 33.438208.  Cell volumes OK.
+    Mesh non-orthogonality Max: 64.991079 average: 8.0301399
+    Non-orthogonality check OK.
+    Face pyramids OK.
+ ***Max skewness = 6.9493061, 7 highly skew faces detected which may impair the quality of the results
+  <<Writing 7 skew faces to set skewFaces
+    Coupled point location match (average 0) OK.
+
+Failed 1 mesh checks.
+
+End
+
+Finalising parallel run

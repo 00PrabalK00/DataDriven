@@ -45,3 +45,17 @@ simulator (best < middle < worst, no overlap). Background: `4_reference/README.m
 ## Not ready yet (tell Claude)
 - RealSense model: the camera recorder script will be written once the model is known.
 - LED mounting position.
+
+## Added Oct 30 evening: canopies with holes
+
+Print `1_print/templates_holes_letter.pdf` (or `_a4`) at 100%. These are the best CFD designs, ahead of the slit canopies:
+
+| Code | Design | CFD speed estimate (m/s) |
+|---|---|---|
+| C0 | Control, no holes | 6.45 |
+| V05 | 5% central vent | 6.32 |
+| V12 | 12% central vent | 6.31 |
+| F56 | Best hand-sampled free-form | 6.35 |
+| W0 | Best search winner | 6.33 |
+
+Red shaded areas come out. Add these codes to `drop_log.csv` as you use them.

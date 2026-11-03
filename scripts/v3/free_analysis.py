@@ -35,7 +35,9 @@ def load(csv_path):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--csv", default=str(ROOT / "results/freeform/server/cfd_free.csv"))
+    ap.add_argument("--csv", default=str(ROOT / "results/freeform/merged_cfd.csv"))
+    ap.add_argument("--health", default=str(ROOT / "results/freeform/shape_health.csv"))
+    ap.add_argument("--clf", default=str(ROOT / "results/freeform/server/inflate/inflate_clf.pkl"))
     a = ap.parse_args()
     from scipy.stats import spearmanr
     from chutesim.config import load_config
@@ -47,9 +49,14 @@ def main():
     cfg = load_config(None)
     OUT.mkdir(parents=True, exist_ok=True)
     data = load(a.csv)
+    bad = {r["name"] for r in csv.DictReader(open(a.health)) if float(r["flutter_mm"]) > 5 or int(r["slack_lines"]) > 0}
+    n0 = len(data)
+    data = [d for d in data if d["name"] not in bad]
+    print(f"{n0 - len(data)} designs excluded: no steady inflated shape (flutter > 5 mm or slack lines)")
     model0 = FreeDescentModel(None, None, cfg)
     for d in data:
         g = build_any_geometry(_design(d["design"]), cfg)
+        g.holes = getattr(g, "holes", [])
         d.update(free_features(g))
         d["speed"] = float(model0.speed(np.array([d["CdA"]]))[0])
         d["family"] = "free" if "free" in d["design"] else ("cut" if d["design"].get("cut") else "ref")
@@ -80,7 +87,8 @@ def main():
                                       "range": float(y.max() - y.min())}
             print(f"  {tname:9s} {mname:9s} rmse={cv[f'{tname}/{mname}']['rmse']:.3g} rho={cv[f'{tname}/{mname}']['spearman']:.3f}")
     (OUT / "surrogate_cv.json").write_text(json.dumps(cv, indent=1))
-    m = FreeDescentModel(make_gp(W.shape[1]).fit(W, cda), make_gp(W.shape[1]).fit(W, cma), cfg)
+    clf = pickle.load(open(a.clf, "rb")) if Path(a.clf).exists() else None
+    m = FreeDescentModel(make_gp(W.shape[1]).fit(W, cda), make_gp(W.shape[1]).fit(W, cma), cfg, clf=clf)
     pickle.dump(m, open(OUT / "free_model.pkl", "wb"))
     # Sobol on the GP (course wk 2: main + interaction effects), ignoring feasibility
     from ddd.sensitivity import sobol_indices
